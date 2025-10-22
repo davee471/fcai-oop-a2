@@ -25,6 +25,11 @@ private:
 	juce::TextButton restartButton{"Restart"};
 	juce::TextButton stopButton{"Stop"};
 	juce::TextButton playButton{"Play"};
+	juce::ToggleButton muteButton{"Mute"};
+
+	// Storing volume before muting, initialized as the default start volume
+	float prevVolume = 0.5f;
+
 	juce::Slider volumeSlider;
 	std::unique_ptr <juce::FileChooser> fileChooser;
 
