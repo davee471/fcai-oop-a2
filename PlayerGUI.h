@@ -18,6 +18,7 @@ public:
 	void prepareToPlay(int samplesPerBlockExpected, double sampleRate);
 	void getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill);
 	void releaseResources();
+	bool Mute = false;
 	bool Loop = false;
 	void timerCallback() override;
 
@@ -29,8 +30,8 @@ private:
 	juce::TextButton restartButton{"Restart"};
 	juce::TextButton stopButton{"Stop"};
 	juce::TextButton playButton{"Play"};
-	juce::ToggleButton muteButton{"Mute"};
-	juce::TextButton loopButton{ "loop" };
+	juce::TextButton muteButton{"Mute"};
+	juce::TextButton loopButton{ "Loop" };
 
 	// Storing volume before muting, initialized as the default start volume
 	float prevVolume = 0.5f;

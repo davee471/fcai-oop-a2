@@ -3,15 +3,11 @@
 PlayerGUI::PlayerGUI()
 {
     // Add buttons
-    for (auto* btn : { &loadButton, &restartButton , &stopButton, &playButton,&loopButton })
+    for (auto* btn : { &loadButton, &restartButton , &stopButton, &playButton,&loopButton, &muteButton })
     {
         btn->addListener(this);
         addAndMakeVisible(btn);
     }
-
-    // Adding mute button cuz VS throws a fit if I put it in the above loop
-    muteButton.addListener(this);
-    addAndMakeVisible(muteButton);
 
     // Volume slider
     volumeSlider.setRange(0.0, 1.0, 0.01);
@@ -108,9 +104,13 @@ void PlayerGUI::buttonClicked(juce::Button* button)
 
     if (button == &muteButton)
     {
+        // Mimics toggle functionality
+        Mute = !Mute;
+
         // If muted, store last volume then set it to 0
-        if(muteButton.getToggleState()) 
+        if(Mute) 
         {
+            muteButton.setButtonText("Unmute");
             prevVolume = (float)volumeSlider.getValue();
             volumeSlider.setValue(0.0);
         }
@@ -118,6 +118,7 @@ void PlayerGUI::buttonClicked(juce::Button* button)
         // If unmuted, set volume back to last value
         else 
         {
+            muteButton.setButtonText("Mute");
             volumeSlider.setValue(prevVolume); 
 		}
     }
@@ -127,7 +128,7 @@ void PlayerGUI::buttonClicked(juce::Button* button)
 
         if (Loop)
         {
-            loopButton.setButtonText("on"); 
+            loopButton.setButtonText("Loop Off"); 
             startTimer(200); // call timercallback every 20ms
         }
         else
@@ -149,10 +150,7 @@ void PlayerGUI::sliderValueChanged(juce::Slider* slider)
         // Then if it's greater than 0, unmute the audio (as in set the toggle to off)
         if (newVolume > 0.0f)
         {
-            // dontsendnotification basically doesn't alert the functions that check if the button was clicked
-            // and we don't really want that to happen here so
-
-            muteButton.setToggleState(false, juce::dontSendNotification);
+            Mute = false;
         }
     }
 
