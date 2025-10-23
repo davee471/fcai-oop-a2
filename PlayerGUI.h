@@ -27,11 +27,11 @@ private:
 
 	// GUI elements
 	juce::TextButton loadButton{"Load File"};
-	juce::TextButton restartButton{"Restart"};
-	juce::TextButton stopButton{"Stop"};
-	juce::TextButton playButton{"Play"};
-	juce::TextButton muteButton{"Mute"};
-	juce::TextButton loopButton{ "Loop" };
+	juce::TextButton toStartButton{"Start"};
+	juce::TextButton stopPlayButton{"Stop"};
+	juce::ToggleButton muteButton{"Mute"};
+	juce::TextButton loopButton{ "loop" };
+	juce::TextButton toEndButton{ "End" };
 
 	// Storing volume before muting, initialized as the default start volume
 	float prevVolume = 0.5f;
