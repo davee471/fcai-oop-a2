@@ -80,8 +80,3 @@ double PlayerAudio::getLength() const
 {
     return transportSource.getLengthInSeconds();
 }
-
-bool PlayerAudio::timefinished() const
-{
-    return transportSource.hasStreamFinished();
-}

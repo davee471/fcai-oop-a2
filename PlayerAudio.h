@@ -18,7 +18,6 @@ public:
     void setPosition(double pos);
     double getPosition() const;
     double getLength() const;
-    bool timefinished() const;
 
 private:
     juce::AudioFormatManager formatManager;

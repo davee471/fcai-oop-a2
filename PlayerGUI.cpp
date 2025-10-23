@@ -1,9 +1,9 @@
-﻿#include "PlayerGUI.h"
+#include "PlayerGUI.h"
 
 PlayerGUI::PlayerGUI()
 {
     // Add buttons
-    for (auto* btn : { &loadButton, &restartButton , &stopButton, &playButton,&loopButton })
+    for (auto* btn : { &loadButton, &restartButton , &stopButton, &playButton })
     {
         btn->addListener(this);
         addAndMakeVisible(btn);
@@ -34,7 +34,6 @@ void PlayerGUI::resized()
     stopButton.setBounds(240, y, 80, 40);
 	playButton.setBounds(340, y, 80, 40);
     muteButton.setBounds(440, y, 80, 40);
-    loopButton.setBounds(540, y, 80, 40);
     /*prevButton.setBounds(340, y, 80, 40);
     nextButton.setBounds(440, y, 80, 40);*/
 
@@ -121,21 +120,6 @@ void PlayerGUI::buttonClicked(juce::Button* button)
             volumeSlider.setValue(prevVolume); 
 		}
     }
-    if (button == &loopButton)
-    {
-        Loop = !Loop;
-
-        if (Loop)
-        {
-            loopButton.setButtonText("on");
-            startTimer(200); // كل 200ms هينادي timerCallback
-        }
-        else
-        {
-            loopButton.setButtonText("Loop");
-            stopTimer(); 
-        }
-    }
 }
 
 void PlayerGUI::sliderValueChanged(juce::Slider* slider)
@@ -156,12 +140,4 @@ void PlayerGUI::sliderValueChanged(juce::Slider* slider)
         }
     }
 
-}
-void PlayerGUI::timerCallback()
-{
-    if (Loop && playerAudio.timefinished())
-    {
-        playerAudio.setPosition(0.0);
-        playerAudio.play();
-    }
 }
