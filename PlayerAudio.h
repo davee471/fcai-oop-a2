@@ -19,8 +19,15 @@ public:
     double getPosition() const;
     double getLength() const;
     bool timefinished() const;
+    void toggle();
+    bool toggleState();
+    void setCurrentPos();
+    double getCurrentPos();
 
 private:
+    bool stopPlayToggle = false;
+    double pos = 0.0;
+
     juce::AudioFormatManager formatManager;
     std::unique_ptr <juce::AudioFormatReaderSource> readerSource;
     juce::AudioTransportSource transportSource;

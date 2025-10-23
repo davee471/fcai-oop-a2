@@ -49,11 +49,9 @@ bool PlayerAudio::loadFile(const juce::File& file)
     return true;
 }
 
-
 void PlayerAudio::play()
 {
     transportSource.start();
-    transportSource.setPosition(0.0);
 }
 
 void PlayerAudio::stop()
@@ -80,7 +78,27 @@ double PlayerAudio::getLength() const
 {
     return transportSource.getLengthInSeconds();
 }
+
 bool PlayerAudio::timefinished() const
 {
     return transportSource.hasStreamFinished();
+}
+
+void PlayerAudio::toggle() 
+{
+    stopPlayToggle = !stopPlayToggle;
+}
+
+bool PlayerAudio::toggleState()
+{
+    return stopPlayToggle;
+}
+
+void PlayerAudio::setCurrentPos()
+{
+    pos = transportSource.getCurrentPosition();
+}
+double PlayerAudio::getCurrentPos()
+{
+    return pos;
 }
