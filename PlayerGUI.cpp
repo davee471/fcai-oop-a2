@@ -14,7 +14,8 @@ PlayerGUI::PlayerGUI()
 		&jumpForwardButton, 
 		&saveSessionButton,  
 		&addMarkerButton, 
-		&jumpToMarkerButton 
+		&jumpToMarkerButton,
+        &loadSessionButton
 				})
     {
         btn->addListener(this);
@@ -48,9 +49,10 @@ void PlayerGUI::resized()
     jumpBackButton.setBounds(640, y, 80, 40);
     jumpForwardButton.setBounds(740, y, 80, 40);
     saveSessionButton.setBounds(840, y, 100, 40);
-    addMarkerButton.setBounds(960, y, 100, 40);
-   jumpToMarkerButton.setBounds(1060, y, 100, 40);
-    
+    loadSessionButton.setBounds(960, y, 100, 40);
+    addMarkerButton.setBounds(1080, y, 100, 40);
+    jumpToMarkerButton.setBounds(1200, y, 100, 40);
+  
     
     /*prevButton.setBounds(340, y, 80, 40);
     nextButton.setBounds(440, y, 80, 40);*/
@@ -125,7 +127,7 @@ void PlayerGUI::buttonClicked(juce::Button* button)
         Mute = !Mute;
 
         // If muted, store last volume then set it to 0
-        if(Mute) 
+        if (Mute)
         {
             muteButton.setButtonText("Unmute");
             prevVolume = (float)volumeSlider.getValue();
@@ -133,82 +135,91 @@ void PlayerGUI::buttonClicked(juce::Button* button)
         }
 
         // If unmuted, set volume back to last value
-        else 
+        else
         {
             muteButton.setButtonText("Mute");
-            volumeSlider.setValue(prevVolume); 
-		}
+            volumeSlider.setValue(prevVolume);
+        }
     }
+
     else if (button == &loopButton)
     {
-        Loop = !Loop; 
+        Loop = !Loop;
 
         if (Loop)
         {
-            loopButton.setButtonText("Loop Off"); 
+            loopButton.setButtonText("Loop Off");
             startTimer(200); // call timercallback every 20ms
         }
         else
         {
             loopButton.setButtonText("Loop");
-            stopTimer(); 
+            stopTimer();
         }
     }
 
-    else if (button == &toEndButton) 
-    {   
-         playerAudio.setPosition(playerAudio.getLength());
-         if (playerAudio.toggleState())
-         {
-             playerAudio.toggle();
-             stopPlayButton.setButtonText("Play");
+    else if (button == &toEndButton)
+    {
+        playerAudio.setPosition(playerAudio.getLength());
+        if (playerAudio.toggleState())
+        {
+            playerAudio.toggle();
+            stopPlayButton.setButtonText("Play");
 
-         }
+        }
     }
 
     else if (button == &stopPlayButton)
     {
         playerAudio.toggle();
-        
+
         if (playerAudio.toggleState())
         {
             playerAudio.setCurrentPos();
             playerAudio.stop();
             stopPlayButton.setButtonText("Play");
         }
-	        else
-	        {
+        else
+        {
             playerAudio.setPosition(playerAudio.getCurrentPos());
             playerAudio.play();
             stopPlayButton.setButtonText("Stop");
-	        }
-	}
+        }
+    }
 
-	else if (button == &addMarkerButton)
-	{
-    playerAudio.addMarker(); 
-	}
+    else if (button == &addMarkerButton)
+    {
+        playerAudio.addMarker();
+    }
 
-	else if (button == &jumpToMarkerButton)
-	{
-    playerAudio.jumpToMarker();
-	}
-	else if (button == &jumpBackButton)
-	{
-    playerAudio.jumpBackward10s();
-	}
-	else if (button == &jumpForwardButton)
-	{
-    playerAudio.jumpForward10s();
-	}
-	else if (button == &saveSessionButton)
-	{
-    playerAudio.saveSession();
-	}
+    else if (button == &jumpToMarkerButton)
+    {
+        playerAudio.jumpToMarker();
+    }
 
+    else if (button == &jumpBackButton)
+    {
+        playerAudio.jumpBackward10s();
+    }
+
+    else if (button == &jumpForwardButton)
+    {
+        playerAudio.jumpForward10s();
+    }
+
+    else if (button == &saveSessionButton)
+    {
+        playerAudio.saveSession();
+    }
+
+    else if (button == &loadSessionButton)
+    {
+        playerAudio.loadSession();
+    }
+}
 
 void PlayerGUI::sliderValueChanged(juce::Slider* slider)
-{
+{ 
     if (slider == &volumeSlider)
     {
         // Check what value the user set the slider to and put the volume to it
@@ -223,6 +234,7 @@ void PlayerGUI::sliderValueChanged(juce::Slider* slider)
     }
 
 }
+
 void PlayerGUI::timerCallback()
 {
     if (Loop && playerAudio.timefinished())

@@ -95,11 +95,11 @@ bool PlayerAudio::toggleState()
     return stopPlayToggle;
 }
 
-
 void PlayerAudio::setCurrentPos()
 {
     pos = transportSource.getCurrentPosition();
 }
+
 double PlayerAudio::getCurrentPos()
 {
     return pos;
@@ -159,12 +159,12 @@ void PlayerAudio::loadSession()
       }
 }
 
-	void PlayerAudio::addMarker()
+void PlayerAudio::addMarker()
 	{
     markerPosition = transportSource.getCurrentPosition();
 	}
 
-	void PlayerAudio::jumpToMarker()
+void PlayerAudio::jumpToMarker()
 	{
     if (markerPosition >= 0)  // If marker is set
         transportSource.setPosition(markerPosition);

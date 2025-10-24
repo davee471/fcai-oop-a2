@@ -32,11 +32,12 @@ private:
 	juce::TextButton muteButton{"Mute"};
 	juce::TextButton loopButton{ "loop" };
 	juce::TextButton toEndButton{ "End" };
-	 juce::TextButton jumpBackButton{"-10s"};
+	juce::TextButton jumpBackButton{"-10s"};
 	juce::TextButton jumpForwardButton{"+10s"};
 	juce::TextButton saveSessionButton{"Save Session"};
+	juce::TextButton loadSessionButton{"Load Session"};
 	juce::TextButton addMarkerButton{"Add Marker"};
-	juce::TextButton jumpToMarkerButton{"Go to Marker"};  
+	juce::TextButton jumpToMarkerButton{"Go to Marker"};
 	
 
 	// Storing volume before muting, initialized as the default start volume
