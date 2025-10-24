@@ -154,6 +154,7 @@ void PlayerGUI::buttonClicked(juce::Button* button)
             stopTimer(); 
         }
     }
+
     else if (button == &toEndButton) 
     {   
          playerAudio.setPosition(playerAudio.getLength());
@@ -175,24 +176,35 @@ void PlayerGUI::buttonClicked(juce::Button* button)
             playerAudio.stop();
             stopPlayButton.setButtonText("Play");
         }
-        else
-        {
+	        else
+	        {
             playerAudio.setPosition(playerAudio.getCurrentPos());
             playerAudio.play();
             stopPlayButton.setButtonText("Stop");
-        }
-}
+	        }
+	}
 
 	else if (button == &addMarkerButton)
 	{
-    playerAudio.addMarker();
-    addMarkerButton.setButtonText("Marker Set!");  
+    playerAudio.addMarker(); 
 	}
+
 	else if (button == &jumpToMarkerButton)
 	{
     playerAudio.jumpToMarker();
 	}
-    }
+	else if (button == &jumpBackButton)
+	{
+    playerAudio.jumpBackward10s();
+	}
+	else if (button == &jumpForwardButton)
+	{
+    playerAudio.jumpForward10s();
+	}
+	else if (button == &saveSessionButton)
+	{
+    playerAudio.saveSession();
+	}
 
 
 void PlayerGUI::sliderValueChanged(juce::Slider* slider)
