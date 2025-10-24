@@ -4,7 +4,9 @@
 
 class PlayerGUI : public juce::Component,
 	public juce::Button::Listener,
-	public juce::Slider::Listener
+	public juce::Slider::Listener,
+	public juce::Timer
+
 {
 public:
 	PlayerGUI();
@@ -16,15 +18,30 @@ public:
 	void prepareToPlay(int samplesPerBlockExpected, double sampleRate);
 	void getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill);
 	void releaseResources();
+	bool Mute = false;
+	bool Loop = false;
+	void timerCallback() override;
 
 private:
 	PlayerAudio playerAudio;
 
 	// GUI elements
 	juce::TextButton loadButton{"Load File"};
-	juce::TextButton restartButton{"Restart"};
-	juce::TextButton stopButton{"Stop"};
-	juce::TextButton playButton{"Play"};
+	juce::TextButton toStartButton{"Start"};
+	juce::TextButton stopPlayButton{"Stop"};
+	juce::TextButton muteButton{"Mute"};
+	juce::TextButton loopButton{ "loop" };
+	juce::TextButton toEndButton{ "End" };
+	 juce::TextButton jumpBackButton{"-10s"};
+	juce::TextButton jumpForwardButton{"+10s"};
+	juce::TextButton saveSessionButton{"Save Session"};
+	juce::TextButton addMarkerButton{"Add Marker"};
+	juce::TextButton jumpToMarkerButton{"Go to Marker"};  
+	
+
+	// Storing volume before muting, initialized as the default start volume
+	float prevVolume = 0.5f;
+
 	juce::Slider volumeSlider;
 	std::unique_ptr <juce::FileChooser> fileChooser;
 
