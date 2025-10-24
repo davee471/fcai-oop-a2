@@ -64,6 +64,7 @@ void PlayerAudio::setGain(float gain)
 {
     transportSource.setGain(gain);
 }
+
 float PlayerAudio::getGain() const
 {
     return transportSource.getGain();

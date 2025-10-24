@@ -109,26 +109,26 @@ void PlayerGUI::buttonClicked(juce::Button* button)
             });
     }
 
-    else if (button == &toStartButton)
+    if (button == &toStartButton)
     {
-        playerAudio.setPosition(0.0);
-        playerAudio.play();
-    }
-        if (playerAudio.toggleState())
-        {
-            playerAudio.toggle();
-            stopPlayButton.setButtonText("Stop");
+         playerAudio.setPosition(0.0);
+         playerAudio.play();
 
-        }
-    }
+         if (playerAudio.toggleState())
+         {
+             playerAudio.toggle();
+             stopPlayButton.setButtonText("Stop");
+         }
 
-    else if (button == &muteButton)
+     }
+
+    if (button == &muteButton)
     {
         // Mimics toggle functionality
         Mute = !Mute;
 
         // If muted, store last volume then set it to 0
-        if (muteButton.getToggleState())
+        // if (muteButton.getToggleState())
         if (Mute)
         {
             muteButton.setButtonText("Unmute");
@@ -144,7 +144,7 @@ void PlayerGUI::buttonClicked(juce::Button* button)
         }
     }
 
-    else if (button == &loopButton)
+    if (button == &loopButton)
     {
         Loop = !Loop;
 
@@ -160,7 +160,7 @@ void PlayerGUI::buttonClicked(juce::Button* button)
         }
     }
 
-    else if (button == &toEndButton)
+    if (button == &toEndButton)
     {
         playerAudio.setPosition(playerAudio.getLength());
         if (playerAudio.toggleState())
@@ -171,7 +171,7 @@ void PlayerGUI::buttonClicked(juce::Button* button)
         }
     }
 
-    else if (button == &stopPlayButton)
+    if (button == &stopPlayButton)
     {
         playerAudio.toggle();
 
@@ -189,32 +189,32 @@ void PlayerGUI::buttonClicked(juce::Button* button)
         }
     }
 
-    else if (button == &addMarkerButton)
+    if (button == &addMarkerButton)
     {
         playerAudio.addMarker();
     }
 
-    else if (button == &jumpToMarkerButton)
+    if (button == &jumpToMarkerButton)
     {
         playerAudio.jumpToMarker();
     }
 
-    else if (button == &jumpBackButton)
+    if (button == &jumpBackButton)
     {
         playerAudio.jumpBackward10s();
     }
 
-    else if (button == &jumpForwardButton)
+    if (button == &jumpForwardButton)
     {
         playerAudio.jumpForward10s();
     }
 
-    else if (button == &saveSessionButton)
+    if (button == &saveSessionButton)
     {
         playerAudio.saveSession();
     }
 
-    else if (button == &loadSessionButton)
+    if (button == &loadSessionButton)
     {
         playerAudio.loadSession();
         volumeSlider.setValue(playerAudio.getGain());

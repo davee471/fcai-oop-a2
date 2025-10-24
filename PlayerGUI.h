@@ -30,7 +30,7 @@ private:
 	juce::TextButton toStartButton{"Start"};
 	juce::TextButton stopPlayButton{"Stop"};
 	juce::TextButton muteButton{"Mute"};
-	juce::TextButton loopButton{ "loop" };
+	juce::TextButton loopButton{ "Loop" };
 	juce::TextButton toEndButton{ "End" };
 	juce::TextButton jumpBackButton{"-10s"};
 	juce::TextButton jumpForwardButton{"+10s"};
