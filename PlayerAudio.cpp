@@ -64,6 +64,10 @@ void PlayerAudio::setGain(float gain)
 {
     transportSource.setGain(gain);
 }
+float PlayerAudio::getGain() const
+{
+    return transportSource.getGain();
+}
 
 void PlayerAudio::setPosition(double pos)
 {
@@ -155,7 +159,8 @@ void PlayerAudio::loadSession()
             if (savedFile.existsAsFile()) 
                 loadFile(savedFile);
             transportSource.setPosition(lines[1].getDoubleValue());
-        	}
+        }
+            transportSource.setGain(lines[2].getDoubleValue());    
       }
 }
 

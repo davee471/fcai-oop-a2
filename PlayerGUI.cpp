@@ -215,6 +215,7 @@ void PlayerGUI::buttonClicked(juce::Button* button)
     else if (button == &loadSessionButton)
     {
         playerAudio.loadSession();
+        volumeSlider.setValue(playerAudio.getGain());
     }
 }
 

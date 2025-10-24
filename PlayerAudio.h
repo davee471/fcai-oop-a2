@@ -15,6 +15,7 @@ public:
     void play();
     void stop();
     void setGain(float gain);
+    float getGain() const;
     void setPosition(double pos);
     double getPosition() const;
     double getLength() const;
