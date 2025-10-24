@@ -185,7 +185,7 @@ void PlayerGUI::buttonClicked(juce::Button* button)
         {
             playerAudio.setPosition(playerAudio.getCurrentPos());
             playerAudio.play();
-            stopPlayButton.setButtonText("Stop");
+            stopPlayButton.setButtonText("Pause");
         }
     }
 
