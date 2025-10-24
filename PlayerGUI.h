@@ -18,6 +18,7 @@ public:
 	void prepareToPlay(int samplesPerBlockExpected, double sampleRate);
 	void getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill);
 	void releaseResources();
+	bool Mute = false;
 	bool Loop = false;
 	void timerCallback() override;
 
