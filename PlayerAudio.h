@@ -23,6 +23,7 @@ public:
     bool toggleState();
     void setCurrentPos();
     double getCurrentPos();
+    
 
 private:
     bool stopPlayToggle = false;

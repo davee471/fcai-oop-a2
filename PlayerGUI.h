@@ -29,7 +29,7 @@ private:
 	juce::TextButton loadButton{"Load File"};
 	juce::TextButton toStartButton{"Start"};
 	juce::TextButton stopPlayButton{"Stop"};
-	juce::ToggleButton muteButton{"Mute"};
+	juce::TextButton muteButton{"Mute"};
 	juce::TextButton loopButton{ "loop" };
 	juce::TextButton toEndButton{ "End" };
 

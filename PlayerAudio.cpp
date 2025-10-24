@@ -94,6 +94,7 @@ bool PlayerAudio::toggleState()
     return stopPlayToggle;
 }
 
+
 void PlayerAudio::setCurrentPos()
 {
     pos = transportSource.getCurrentPosition();

@@ -89,7 +89,14 @@ void PlayerGUI::buttonClicked(juce::Button* button)
 
     if (button == &toStartButton)
     {
+        playerAudio.setPosition(0.0);
         playerAudio.play();
+        if (playerAudio.toggleState())
+        {
+            playerAudio.toggle();
+            stopPlayButton.setButtonText("Stop");
+
+        }
     }
 
     if (button == &muteButton)
@@ -130,6 +137,12 @@ void PlayerGUI::buttonClicked(juce::Button* button)
     if (button == &toEndButton) 
     {   
          playerAudio.setPosition(playerAudio.getLength());
+         if (playerAudio.toggleState())
+         {
+             playerAudio.toggle();
+             stopPlayButton.setButtonText("Play");
+
+         }
     }
 
     if (button == &stopPlayButton)
@@ -140,6 +153,7 @@ void PlayerGUI::buttonClicked(juce::Button* button)
         {
             playerAudio.setCurrentPos();
             playerAudio.stop();
+            stopPlayButton.setButtonText("Play");
         }
         else
         {
