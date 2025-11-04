@@ -3,19 +3,23 @@
 PlayerGUI::PlayerGUI()
 {
     // Add buttons
-    for (auto* btn : { 
-		&loadButton,
-		&toStartButton, 
- 		&stopPlayButton, 
-		&loopButton, 
-		&muteButton, 
-		&toEndButton, 
-		&jumpBackButton, 
-		&jumpForwardButton, 
-		&saveSessionButton,  
-		&addMarkerButton, 
-		&jumpToMarkerButton,
-        &loadSessionButton
+    for (auto* btn : {
+        &loadButton,
+        &toStartButton,
+        &stopPlayButton,
+        &loopButton,
+        &muteButton,
+        &toEndButton,
+        &jumpBackButton,
+        &jumpForwardButton,
+        &saveSessionButton,
+        &addMarkerButton,
+        &jumpToMarkerButton,
+        &loadSessionButton,
+        & set_A_pos,
+        & set_B_pos,
+        & set_AB_loop,
+
 				})
     {
         btn->addListener(this);
@@ -63,15 +67,20 @@ void PlayerGUI::resized()
     loadSessionButton.setBounds(960, y, 100, 40);
     addMarkerButton.setBounds(1080, y, 100, 40);
     jumpToMarkerButton.setBounds(1200, y, 100, 40);
+    y += 50;
+    set_AB_loop.setBounds(20, y, 100, 40);
+    set_A_pos.setBounds(140, y, 80, 40);
+    set_B_pos.setBounds(240, y, 80, 40);
+    
     
   
     
     /*prevButton.setBounds(340, y, 80, 40);
     nextButton.setBounds(440, y, 80, 40);*/
-
-    volumeSlider.setBounds(20, 100, getWidth() - 40, 30);
-    timelineslider.setBounds(150, 200, getWidth() - 190, 30);//new
-    timeLabel.setBounds(0, 200, 120, 25);
+    y += 50;
+    volumeSlider.setBounds(20, 120, getWidth() - 40, 30);
+    timelineslider.setBounds(150, 170, getWidth() - 190, 30);//new
+    timeLabel.setBounds(0, 170, 120, 25);
 }
 
 PlayerGUI::~PlayerGUI()
@@ -124,7 +133,7 @@ void PlayerGUI::buttonClicked(juce::Button* button)
             
                     double length = playerAudio.getLength();
                     timelineslider.setRange(0.0, length, 0.1);
-                    timeLabel.setText("00:00:00 / " + formatTime(length), juce::dontSendNotification);
+                    timeLabel.setText("00:00 / " + formatTime(length), juce::dontSendNotification);
                 }
             });
     }
@@ -171,12 +180,12 @@ void PlayerGUI::buttonClicked(juce::Button* button)
         if (Loop)
         {
             loopButton.setButtonText("Loop Off");
-            startTimer(200); // call timercallback every 20ms
+          
         }
         else
         {
             loopButton.setButtonText("Loop");
-            stopTimer();
+            
         }
     }
 
@@ -239,6 +248,46 @@ void PlayerGUI::buttonClicked(juce::Button* button)
         playerAudio.loadSession();
         volumeSlider.setValue(playerAudio.getGain());
     }
+    if (button == &set_A_pos)
+    {
+        pointA = playerAudio.getPosition();
+        set_A_pos.setButtonText("A: " + formatTime(pointA));
+
+    }
+    if (button == &set_B_pos)
+    {
+        pointB = playerAudio.getPosition();
+        if (pointA >= 0 && pointB <= pointA)
+        {
+            set_B_pos.setButtonText("set B");
+        }
+        else
+        {
+            set_B_pos.setButtonText("B: " + formatTime(pointB));
+
+        }
+    }
+    if (button == &set_AB_loop)
+    {
+        if (pointA >= 0 && pointB > pointA)
+        {
+            AB_loop = !AB_loop;
+
+        }
+        if (AB_loop)
+
+        {
+            set_AB_loop.setButtonText("end_AB_loop");
+        }
+        else {
+            set_AB_loop.setButtonText("A=>B_loop");
+            pointA = -1.0;
+            pointB = -1.0;
+            AB_loop = false;
+            set_A_pos.setButtonText("set A");
+            set_B_pos.setButtonText("set B");
+        }
+    }
 }
 
 void PlayerGUI::sliderValueChanged(juce::Slider* slider)
@@ -279,6 +328,11 @@ void PlayerGUI::timerCallback()
     timelineslider.setValue(currentPos, juce::dontSendNotification);
     juce::String timeText = formatTime(currentPos) + " / " + formatTime(totalLength);
     timeLabel.setText(timeText, juce::dontSendNotification);
+    if (AB_loop && pointA >= 0 && pointA < pointB && pointB < currentPos)
+    {
+        playerAudio.setPosition(pointA);
+        playerAudio.play();
+    }
 
 
     if (Loop && playerAudio.timefinished())

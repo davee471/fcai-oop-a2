@@ -20,7 +20,10 @@ public:
 	void releaseResources();
 	bool Mute = false;
 	bool Loop = false;
+	bool AB_loop = false;
 	void timerCallback() override;
+	float pointA = -1.0;
+	float pointB = -1.0;
 
 private:
 	PlayerAudio playerAudio;
@@ -41,7 +44,12 @@ private:
 	juce::Slider timelineslider;//me
 	juce::Label timeLabel;
 	juce::String formatTime(double seconds);
-	
+	juce::TextButton set_A_pos{"set A"};
+	juce::TextButton set_B_pos{"set B"};
+	juce::TextButton set_AB_loop{ "A=>B_loop" };
+	//juce::TextButton clearAB;
+
+
 
 	// Storing volume before muting, initialized as the default start volume
 	float prevVolume = 0.5f;
