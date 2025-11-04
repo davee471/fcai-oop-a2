@@ -38,6 +38,9 @@ private:
 	juce::TextButton loadSessionButton{"Load Session"};
 	juce::TextButton addMarkerButton{"Add Marker"};
 	juce::TextButton jumpToMarkerButton{"Go to Marker"};
+	juce::Slider timelineslider;//me
+	juce::Label timeLabel;
+	juce::String formatTime(double seconds);
 	
 
 	// Storing volume before muting, initialized as the default start volume

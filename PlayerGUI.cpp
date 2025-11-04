@@ -23,13 +23,24 @@ PlayerGUI::PlayerGUI()
     }
 	
 
-
     // Volume slider
-    volumeSlider.setRange(0.0, 1.0, 0.01);
-    volumeSlider.setValue(0.5);
+    volumeSlider.setRange(0.0, 1, 0.01);
+    volumeSlider.setValue(5);
     volumeSlider.addListener(this);
     addAndMakeVisible(volumeSlider);
+    //Time line slider  
+    timelineslider.setRange(0.0, 1.0, 0.01);
+    timelineslider.setValue(0.0);
+    timelineslider.addListener(this);
+    timelineslider.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
+    addAndMakeVisible(timelineslider);
+    //Time lable    
+    timeLabel.setText("00:00:00/00:00:00", juce::dontSendNotification);
 
+    timeLabel.setFont(juce::Font(10.0f, juce::Font::bold));
+    timeLabel.setColour(juce::Label::textColourId, juce::Colours::white);
+    addAndMakeVisible(timeLabel);
+    startTimer(100);
     // Tracking last volume before muting
     prevVolume = (float)volumeSlider.getValue();
 
@@ -52,16 +63,20 @@ void PlayerGUI::resized()
     loadSessionButton.setBounds(960, y, 100, 40);
     addMarkerButton.setBounds(1080, y, 100, 40);
     jumpToMarkerButton.setBounds(1200, y, 100, 40);
+    
   
     
     /*prevButton.setBounds(340, y, 80, 40);
     nextButton.setBounds(440, y, 80, 40);*/
 
     volumeSlider.setBounds(20, 100, getWidth() - 40, 30);
+    timelineslider.setBounds(150, 200, getWidth() - 190, 30);//new
+    timeLabel.setBounds(0, 200, 120, 25);
 }
 
 PlayerGUI::~PlayerGUI()
 {
+    stopTimer();
 }
 
 void PlayerGUI::prepareToPlay(int samplesPerBlockExpected, double sampleRate)
@@ -84,6 +99,7 @@ void PlayerGUI::paint(juce::Graphics& g)
     g.fillAll(juce::Colours::darkgrey);
 }
 
+
 void PlayerGUI::buttonClicked(juce::Button* button)
 {
     if (button == &loadButton)
@@ -105,6 +121,10 @@ void PlayerGUI::buttonClicked(juce::Button* button)
                 if (file.existsAsFile())
                 {
                     playerAudio.loadFile(file);
+            
+                    double length = playerAudio.getLength();
+                    timelineslider.setRange(0.0, length, 0.1);
+                    timeLabel.setText("00:00:00 / " + formatTime(length), juce::dontSendNotification);
                 }
             });
     }
@@ -234,15 +254,48 @@ void PlayerGUI::sliderValueChanged(juce::Slider* slider)
         {
             Mute = false;
         }
+
     }
+    else if (slider == &timelineslider)
+    {
+       
+        if (!slider->isMouseButtonDown())
+        {
+            return; 
+
+            playerAudio.setPosition(slider->getValue());
+        }
+        else
+            playerAudio.setPosition((float)slider->getValue());
+    }
+
 
 }
 
 void PlayerGUI::timerCallback()
 {
+    double currentPos = playerAudio.getPosition();
+    double totalLength = playerAudio.getLength();
+    timelineslider.setValue(currentPos, juce::dontSendNotification);
+    juce::String timeText = formatTime(currentPos) + " / " + formatTime(totalLength);
+    timeLabel.setText(timeText, juce::dontSendNotification);
+
+
     if (Loop && playerAudio.timefinished())
     {
         playerAudio.setPosition(0.0);
         playerAudio.play();
     }
+}
+juce::String PlayerGUI::formatTime(double seconds)
+{
+    int hours = (int)seconds / 3600;
+    int mins = ((int)seconds % 3600) / 60;
+    int secs = (int)seconds % 60;
+    if (hours > 0)
+        return juce::String::formatted("%02d:%02d:%02d", hours, mins, secs);
+    else
+        return juce::String::formatted("%02d:%02d", mins, secs);
+  
+
 }
