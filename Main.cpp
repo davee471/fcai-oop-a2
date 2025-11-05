@@ -31,7 +31,7 @@ private:
         {
             setUsingNativeTitleBar(true);
             setContentOwned(new MainComponent(), true); // MainComponent = our UI + logic
-            centreWithSize(1500, 750);
+            centreWithSize(1800, 900);
             setVisible(true);
         }
 

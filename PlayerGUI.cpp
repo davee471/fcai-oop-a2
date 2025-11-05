@@ -38,6 +38,7 @@ PlayerGUI::PlayerGUI()
 void PlayerGUI::resized()
 {
     int y = 20;
+    int m = 80;
     // Adds the buttons to gui
 
     loadButton.setBounds(20, y, 100, 40);
@@ -48,16 +49,12 @@ void PlayerGUI::resized()
     loopButton.setBounds(540, y, 80, 40);
     jumpBackButton.setBounds(640, y, 80, 40);
     jumpForwardButton.setBounds(740, y, 80, 40);
-    saveSessionButton.setBounds(840, y, 100, 40);
-    loadSessionButton.setBounds(960, y, 100, 40);
-    addMarkerButton.setBounds(1080, y, 100, 40);
-    jumpToMarkerButton.setBounds(1200, y, 100, 40);
-  
-    
-    /*prevButton.setBounds(340, y, 80, 40);
-    nextButton.setBounds(440, y, 80, 40);*/
+    saveSessionButton.setBounds(20, m, 100, 40);
+    loadSessionButton.setBounds(140, m, 100, 40);
+    addMarkerButton.setBounds(260, m, 100, 40);
+    jumpToMarkerButton.setBounds(380, m, 100, 40);
 
-    volumeSlider.setBounds(20, 100, getWidth() - 40, 30);
+    volumeSlider.setBounds(20, 150, getWidth() - 40, 30);
 }
 
 PlayerGUI::~PlayerGUI()
