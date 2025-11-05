@@ -53,11 +53,25 @@ public:
     void playbackSpeed(double ratio);
     juce::AudioThumbnail& getThumbnail();
 
+    double getPlaybackSpeed() const;
+
+    void setPointA();
+    void setPointB();
+    void toggleABLoop();
+    float getPointA() const;
+    float getPointB() const;
+    bool abLoopState() const;
+    void resetABLoop();
+
 private:
     bool Mute = false;
     bool Loop = false;
     bool Shuffle = false;
     double markerPosition = -1.0;
+
+    bool AB_loop = false;
+    float pointA = -1.0;
+    float pointB = -1.0;
 
     juce::String title;
 

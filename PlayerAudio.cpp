@@ -211,6 +211,20 @@ void PlayerAudio::saveSession()
     data.add(juce::String(transportSource.getCurrentPosition()));
     data.add(juce::String(transportSource.getGain()));
 
+    data.add(juce::String(pointA));
+    data.add(juce::String(pointB));
+    data.add(juce::String(AB_loop ? 1 : 0));
+    
+    if (resampledSource)
+    {
+        data.add(juce::String(resampledSource->getResamplingRatio()));
+    }
+
+    else
+    {
+        data.add("1.0");
+    }
+
     for (const auto& file : playlist)
     {
         data.add(file.getFullPathName());
@@ -229,7 +243,7 @@ void PlayerAudio::loadSession()
     juce::StringArray lines;
     sessionFile.readLines(lines);
 
-    if (lines.size() < 3) return;
+    if (lines.size() < 7) return;
 
     playlist.clear();
     currentIndex = -1;
@@ -238,7 +252,12 @@ void PlayerAudio::loadSession()
     double savedPos = lines[1].getDoubleValue();
     float savedGain = lines[2].getFloatValue();
 
-    for (int i = 3; i < lines.size(); ++i)
+    pointA = lines[3].getFloatValue();
+    pointB = lines[4].getFloatValue();
+    AB_loop = lines[5].getIntValue() == 1;
+    double savedSpeed = lines[6].getDoubleValue();
+
+    for (int i = 7; i < lines.size(); ++i)
     {
         juce::File file(lines[i]);
         if (file.existsAsFile())
@@ -256,6 +275,7 @@ void PlayerAudio::loadSession()
 
     transportSource.setGain(savedGain);
     if (!Mute) prevVolume = savedGain;
+    playbackSpeed(savedSpeed);
 }
 
 bool PlayerAudio::isMarkerSet() const
@@ -456,7 +476,66 @@ void PlayerAudio::playbackSpeed(double ratio)
 	}
 }
 
+double PlayerAudio::getPlaybackSpeed() const
+{
+    if (resampledSource)
+        return resampledSource->getResamplingRatio();
+    return 1.0; // Default speed
+}
+
 juce::AudioThumbnail& PlayerAudio::getThumbnail()
 {
     return thumbnail;
+}
+
+void PlayerAudio::setPointA()
+{
+    pointA = getPosition();
+    if (pointB >= 0 && pointA > pointB)
+    {
+        pointB = -1.0;
+        AB_loop = false;
+    }
+}
+
+void PlayerAudio::setPointB()
+{
+    if (pointA >= 0 && getPosition() > pointA)
+    {
+        pointB = getPosition();
+    }
+}
+
+void PlayerAudio::toggleABLoop()
+{
+    if (pointA >= 0 && pointB > pointA)
+    {
+        AB_loop = !AB_loop;
+    }
+    if (!AB_loop)
+    {
+        resetABLoop();
+    }
+}
+
+void PlayerAudio::resetABLoop()
+{
+    AB_loop = false;
+    pointA = -1.0;
+    pointB = -1.0;
+}
+
+float PlayerAudio::getPointA() const 
+{
+    return pointA;
+}
+
+float PlayerAudio::getPointB() const 
+{
+    return pointB;
+}
+
+bool PlayerAudio::abLoopState() const 
+{
+    return AB_loop;
 }

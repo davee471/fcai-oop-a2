@@ -68,9 +68,9 @@ PlayerGUI::PlayerGUI()
 
 void PlayerGUI::resized()
 {
-    int y = 20;
-    int m = 80;
-    int l = 140;
+    int y = 10;
+    int m = 55;
+    int l = 100;
     // Adds the buttons to gui
 
     loadButton.setBounds(20, y, 100, 40);
@@ -87,16 +87,16 @@ void PlayerGUI::resized()
     jumpToMarkerButton.setBounds(380, m, 100, 40);
   
     loadFolderButton.setBounds(500, m, 100, 40);
-    deleteButton.setBounds(600, m, 80, 40);
-    shuffleButton.setBounds(700, m, 80, 40);
+    deleteButton.setBounds(620, m, 80, 40);
+    shuffleButton.setBounds(720, m, 80, 40);
 
-	  speedSlider.setBounds(getWidth() - 50, 300, 30, 100);
+	speedSlider.setBounds(getWidth() - 50, 300, 30, 100);
   
     set_AB_loop.setBounds(20, l, 100, 40);
     set_A_pos.setBounds(140, l, 80, 40);
     set_B_pos.setBounds(240, l, 80, 40);
 
-    volumeSlider.setBounds(40, 120, getWidth() - 120, 30);
+    volumeSlider.setBounds(40, 140, getWidth() - 120, 30);
 
     timelineslider.setBounds(120, 170, getWidth() - 200, 30);
 
@@ -104,7 +104,7 @@ void PlayerGUI::resized()
 
     metadataLabel.setBounds(20, 200, getWidth() - 40, 100);
 
-    playlistBox.setBounds(20, 300, getWidth() - 40, 300);
+    playlistBox.setBounds(100, 750, getWidth() - 200, 300);
 
 }
 
@@ -132,7 +132,7 @@ void PlayerGUI::releaseResources()
 void PlayerGUI::paint(juce::Graphics& g)
 {
     g.fillAll(juce::Colours::darkgrey);
-    juce::Rectangle<int> thumbnailArea(100, 200, getWidth() - 200, getHeight() - 350);
+    juce::Rectangle<int> thumbnailArea(100, 200, getWidth() - 200, getHeight() - 700);
 
     // Colour the rectangle in black
     g.setColour(juce::Colours::black);
@@ -168,10 +168,6 @@ void PlayerGUI::buttonClicked(juce::Button* button)
             auto file = fc.getResult();
             if (file.existsAsFile())
             {
-                double length = playerAudio.getLength();
-                timelineslider.setRange(0.0, length, 0.1);
-                timeLabel.setText("00:00 / " + formatTime(length), juce::dontSendNotification);
-
                 bool added = playerAudio.addToPlaylist(file);
                 if (added)
                 {
@@ -313,12 +309,12 @@ void PlayerGUI::buttonClicked(juce::Button* button)
     if (button == &loadSessionButton)
     {
         playerAudio.loadSession();
-
         playlistBox.updateContent();
-
         volumeSlider.setValue(playerAudio.getGain());
+        speedSlider.setValue(playerAudio.getPlaybackSpeed());
         playerAudio.sendChangeMessage();
         playerAudio.play();
+
     }
 
     if (button == &shuffleButton)
@@ -326,42 +322,38 @@ void PlayerGUI::buttonClicked(juce::Button* button)
         playerAudio.shuffle();
         shuffleButton.setButtonText(playerAudio.shuffleState() ? "Shuffle Off" : "Shuffle");
     }
+
     if (button == &set_A_pos)
     {
-        pointA = playerAudio.getPosition();
-        set_A_pos.setButtonText("A: " + formatTime(pointA));
+        playerAudio.setPointA();
+        set_A_pos.setButtonText("A: " + formatTime(playerAudio.getPointA()));
 
-    }
-    if (button == &set_B_pos)
-    {
-        pointB = playerAudio.getPosition();
-        if (pointA >= 0 && pointB <= pointA)
+        if (playerAudio.getPointB() < 0)
         {
             set_B_pos.setButtonText("set B");
-        }
-        else
-        {
-            set_B_pos.setButtonText("B: " + formatTime(pointB));
-
+            set_AB_loop.setButtonText("A=>B_loop");
         }
     }
+
+    if (button == &set_B_pos)
+    {
+        playerAudio.setPointB();
+        if (playerAudio.getPointB() > 0)
+            set_B_pos.setButtonText("B: " + formatTime(playerAudio.getPointB()));
+        else
+            set_B_pos.setButtonText("set B");
+    }
+
     if (button == &set_AB_loop)
     {
-        if (pointA >= 0 && pointB > pointA)
-        {
-            AB_loop = !AB_loop;
+        playerAudio.toggleABLoop();
 
-        }
-        if (AB_loop)
-
+        if (playerAudio.abLoopState())
         {
             set_AB_loop.setButtonText("end_AB_loop");
         }
         else {
             set_AB_loop.setButtonText("A=>B_loop");
-            pointA = -1.0;
-            pointB = -1.0;
-            AB_loop = false;
             set_A_pos.setButtonText("set A");
             set_B_pos.setButtonText("set B");
         }
@@ -409,18 +401,16 @@ void PlayerGUI::changeListenerCallback(juce::ChangeBroadcaster* source)
         timelineslider.setRange(0.0, lenSeconds, 0.1);
         timeLabel.setText(formatTime(playerAudio.getPosition()) + " / " + formatTime(lenSeconds), juce::dontSendNotification);
 
-        if (playerAudio.getCurrentIndex() > 0) 
+        if (playerAudio.getCurrentIndex() > 0)
         {
             prevButton.setButtonText("Previous");
         }
-
         else prevButton.setButtonText("Start");
 
         if (playerAudio.getCurrentIndex() >= 0 && playerAudio.getCurrentIndex() < playerAudio.getPlaylistSize() - 1)
         {
             nextButton.setButtonText("Next");
         }
-
         else nextButton.setButtonText("End");
 
         jumpToMarkerButton.setEnabled(playerAudio.isMarkerSet());
@@ -429,6 +419,11 @@ void PlayerGUI::changeListenerCallback(juce::ChangeBroadcaster* source)
         muteButton.setButtonText(playerAudio.mutedState() ? "Unmute" : "Mute");
         loopButton.setButtonText(playerAudio.loopState() ? "Loop Off" : "Loop");
         shuffleButton.setButtonText(playerAudio.shuffleState() ? "Shuffle Off" : "Shuffle");
+    }
+    else if (source == &thumbnail)
+    {
+        // redraw the waveform when 'thumbnail' finally loads
+        repaint();
     }
 }     
 
@@ -439,23 +434,16 @@ void PlayerGUI::timerCallback()
     timelineslider.setValue(currentPos, juce::dontSendNotification);
     juce::String timeText = formatTime(currentPos) + " / " + formatTime(totalLength);
     timeLabel.setText(timeText, juce::dontSendNotification);
-    if (AB_loop && pointA >= 0 && pointA < pointB && pointB < currentPos)
+
+    if (playerAudio.abLoopState() && playerAudio.getPointA() >= 0 &&
+        playerAudio.getPointB() > playerAudio.getPointA() &&
+        currentPos > playerAudio.getPointB())
     {
-        playerAudio.setPosition(pointA);
+        playerAudio.setPosition(playerAudio.getPointA());
         playerAudio.play();
     }
     
     repaint();
-}
-
-void PlayerGUI::changeListenerCallback(juce::ChangeBroadcaster* source)
-{
-    if (source == &playerAudio.getThumbnail())
-    {
-        // redraw the waveform when 'thumbnail' finally loads
-        repaint();
-	}
-}
 }
 
 juce::String PlayerGUI::formatTime(double seconds)

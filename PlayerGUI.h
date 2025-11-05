@@ -21,13 +21,10 @@ public:
 	void getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill);
 	void releaseResources();
 
-	bool AB_loop = false;
 	void timerCallback() override;
 	float getGain() const { return playerAudio.getGain(); }
 	void changeListenerCallback(juce::ChangeBroadcaster* source) override;
 
-	float pointA = -1.0;
-	float pointB = -1.0;
 	void sliderDragStarted(juce::Slider* slider) override;//me
 	void sliderDragEnded(juce::Slider* slider) override;//me
 
@@ -80,8 +77,6 @@ private:
 
 	void buttonClicked(juce::Button* button) override;
 	void sliderValueChanged(juce::Slider* slider) override;
-
-	void changeListenerCallback(juce::ChangeBroadcaster* source) override;
 
 	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PlayerGUI)
 };
