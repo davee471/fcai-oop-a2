@@ -22,6 +22,7 @@ public:
 	bool Mute = false;
 	bool Loop = false;
 	void timerCallback() override;
+	float getGain() const { return playerAudio.getGain(); }
 	void changeListenerCallback(juce::ChangeBroadcaster* source) override;
 
 
@@ -32,19 +33,19 @@ private:
 	juce::AudioThumbnail& thumbnail;
 
 	// GUI elements
-	juce::TextButton loadButton{"Load File"};
-	juce::TextButton toStartButton{"Start"};
-	juce::TextButton stopPlayButton{"Stop"};
-	juce::TextButton muteButton{"Mute"};
+	juce::TextButton loadButton{ "Load File" };
+	juce::TextButton toStartButton{ "Start" };
+	juce::TextButton stopPlayButton{ "Stop" };
+	juce::TextButton muteButton{ "Mute" };
 	juce::TextButton loopButton{ "Loop" };
 	juce::TextButton toEndButton{ "End" };
-	juce::TextButton jumpBackButton{"-10s"};
-	juce::TextButton jumpForwardButton{"+10s"};
-	juce::TextButton saveSessionButton{"Save Session"};
-	juce::TextButton loadSessionButton{"Load Session"};
-	juce::TextButton addMarkerButton{"Add Marker"};
-	juce::TextButton jumpToMarkerButton{"Go to Marker"};
-	
+	juce::TextButton jumpBackButton{ "-10s" };
+	juce::TextButton jumpForwardButton{ "+10s" };
+	juce::TextButton saveSessionButton{ "Save Session" };
+	juce::TextButton loadSessionButton{ "Load Session" };
+	juce::TextButton addMarkerButton{ "Add Marker" };
+	juce::TextButton jumpToMarkerButton{ "Go to Marker" };
+
 
 	// Storing volume before muting, initialized as the default start volume
 	float prevVolume = 0.5f;
