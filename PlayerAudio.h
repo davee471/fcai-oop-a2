@@ -49,6 +49,9 @@ public:
 
     void shuffle();
     bool shuffleState() const;
+    
+    void playbackSpeed(double ratio);
+    juce::AudioThumbnail& getThumbnail();
 
 private:
     bool Mute = false;
@@ -59,9 +62,18 @@ private:
     juce::String title;
 
     float prevVolume = 0.5f;
+    
+        // Storing information from preparetoplay so I can transfer it to the resampled source without losing anything
+    int currentSamplesPerBlock = 0; 
+    double currentSampleRate = 0.0;
+
+    // Creating the audiothumbnail stuff for waveform
+    juce::AudioThumbnailCache thumbnailCache;
+    juce::AudioThumbnail thumbnail;
 
     juce::AudioFormatManager formatManager;
     std::unique_ptr <juce::AudioFormatReaderSource> readerSource;
+    std::unique_ptr<juce::ResamplingAudioSource> resampledSource;
     juce::AudioTransportSource transportSource;
     juce::File currentFile;	
 

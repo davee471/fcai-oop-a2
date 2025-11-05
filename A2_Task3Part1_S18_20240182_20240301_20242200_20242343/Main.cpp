@@ -1,6 +1,7 @@
 #include <JuceHeader.h>
 #include "MainComponent.h"
 
+// Our application class
 class SimpleAudioPlayer : public juce::JUCEApplication
 {
 public:
@@ -9,15 +10,17 @@ public:
 
     void initialise(const juce::String&) override
     {
+        // Create and show the main window
         mainWindow = std::make_unique<MainWindow>(getApplicationName());
     }
 
     void shutdown() override
     {
-        mainWindow = nullptr;
+        mainWindow = nullptr; // Clean up
     }
 
 private:
+    // The main window of the app
     class MainWindow : public juce::DocumentWindow
     {
     public:
@@ -28,9 +31,7 @@ private:
         {
             setUsingNativeTitleBar(true);
             setContentOwned(new MainComponent(), true); // MainComponent = our UI + logic
-            setResizable(true, true);
-            setResizeLimits(800, 600, 10000, 10000);
-            centreWithSize(1800, 900);
+            centreWithSize(1500, 750);
             setVisible(true);
         }
 
@@ -43,4 +44,5 @@ private:
     std::unique_ptr<MainWindow> mainWindow;
 };
 
+// This macro starts the app
 START_JUCE_APPLICATION(SimpleAudioPlayer)

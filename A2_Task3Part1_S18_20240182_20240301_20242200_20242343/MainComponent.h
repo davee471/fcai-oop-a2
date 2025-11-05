@@ -1,4 +1,4 @@
-#pragma once
+#pragma once						// MainComponent.h
 #include <JuceHeader.h>
 #include "PlayerGUI.h"
 
@@ -15,6 +15,5 @@ public:
 
 private:
     PlayerGUI player1;
-    PlayerGUI player2;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainComponent)
 };

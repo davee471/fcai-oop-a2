@@ -23,6 +23,9 @@ public:
 
 	bool AB_loop = false;
 	void timerCallback() override;
+	float getGain() const { return playerAudio.getGain(); }
+	void changeListenerCallback(juce::ChangeBroadcaster* source) override;
+
 	float pointA = -1.0;
 	float pointB = -1.0;
 	void sliderDragStarted(juce::Slider* slider) override;//me
@@ -36,6 +39,10 @@ public:
 private:
 	PlayerAudio playerAudio;
 
+	// to initialize as thumbnail in the playerGUI constructor so I don't have to keep using the getter
+	juce::AudioThumbnail& thumbnail;
+
+	// GUI elements
 	juce::TextButton muteButton{ "Mute" };
 	juce::TextButton loopButton{ "Loop" };
 	juce::TextButton playPauseButton{ "Play" };
@@ -68,6 +75,7 @@ private:
 	juce::Label metadataLabel;
 
 	juce::Slider volumeSlider;
+	juce::Slider speedSlider;
 	std::unique_ptr <juce::FileChooser> fileChooser;
 
 	void buttonClicked(juce::Button* button) override;

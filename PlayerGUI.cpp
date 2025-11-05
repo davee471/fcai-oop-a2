@@ -1,6 +1,7 @@
 ﻿#include "PlayerGUI.h"
 
 PlayerGUI::PlayerGUI()
+	: thumbnail(playerAudio.getThumbnail())
 {
     for (auto* btn : { &loadButton, &jumpBackButton, &jumpForwardButton,
             &saveSessionButton, &addMarkerButton, &jumpToMarkerButton,
@@ -39,6 +40,13 @@ PlayerGUI::PlayerGUI()
     startTimer(100);//recall timercallback
 
 
+    // Speed slider
+    speedSlider.setRange(0.25, 2.0, 0.25);
+    speedSlider.setValue(1);
+    speedSlider.setSliderStyle(juce::Slider::LinearVertical);
+    speedSlider.addListener(this);
+	addAndMakeVisible(speedSlider);
+
     // Tracking last volume before muting
     playerAudio.setGain((float)volumeSlider.getValue());
 
@@ -50,11 +58,20 @@ PlayerGUI::PlayerGUI()
     jumpToMarkerButton.setEnabled(playerAudio.isMarkerSet());
     deleteButton.setEnabled(false);
 
+    // Start listening to waveform changes
+	thumbnail.addChangeListener(this);
+
+    // Starting a timer to keep redrawing where the waveform tracker is, can also be used for loop
+    startTimerHz(30);
+
 }
 
 void PlayerGUI::resized()
 {
     int y = 20;
+    int m = 80;
+    int l = 140;
+    // Adds the buttons to gui
 
     loadButton.setBounds(20, y, 100, 40);
     prevButton.setBounds(140, y, 80, 40);
@@ -64,18 +81,20 @@ void PlayerGUI::resized()
     loopButton.setBounds(540, y, 80, 40);
     jumpBackButton.setBounds(640, y, 80, 40);
     jumpForwardButton.setBounds(740, y, 80, 40);
-    saveSessionButton.setBounds(840, y, 100, 40);
-    loadSessionButton.setBounds(960, y, 100, 40);
-    addMarkerButton.setBounds(1080, y, 100, 40);
-    jumpToMarkerButton.setBounds(1200, y, 100, 40);
-    loadFolderButton.setBounds(1320, y, 100, 40);
-    deleteButton.setBounds(1440, y, 80, 40);
-    shuffleButton.setBounds(1540, y, 80, 40);
+    saveSessionButton.setBounds(20, m, 100, 40);
+    loadSessionButton.setBounds(140, m, 100, 40);
+    addMarkerButton.setBounds(260, m, 100, 40);
+    jumpToMarkerButton.setBounds(380, m, 100, 40);
   
-    y += 50;
-    set_AB_loop.setBounds(20, y, 100, 40);
-    set_A_pos.setBounds(140, y, 80, 40);
-    set_B_pos.setBounds(240, y, 80, 40);
+    loadFolderButton.setBounds(500, m, 100, 40);
+    deleteButton.setBounds(600, m, 80, 40);
+    shuffleButton.setBounds(700, m, 80, 40);
+
+	  speedSlider.setBounds(getWidth() - 50, 300, 30, 100);
+  
+    set_AB_loop.setBounds(20, l, 100, 40);
+    set_A_pos.setBounds(140, l, 80, 40);
+    set_B_pos.setBounds(240, l, 80, 40);
 
     volumeSlider.setBounds(40, 120, getWidth() - 120, 30);
 
@@ -113,6 +132,27 @@ void PlayerGUI::releaseResources()
 void PlayerGUI::paint(juce::Graphics& g)
 {
     g.fillAll(juce::Colours::darkgrey);
+    juce::Rectangle<int> thumbnailArea(100, 200, getWidth() - 200, getHeight() - 350);
+
+    // Colour the rectangle in black
+    g.setColour(juce::Colours::black);
+    g.fillRect(thumbnailArea);
+	auto& thumbnail = playerAudio.getThumbnail();
+
+    // Colour the waveform in orange
+    g.setColour(juce::Colours::orange);
+    thumbnail.drawChannel(g, thumbnailArea, 0.0, thumbnail.getTotalLength(), 0 , 0.5f);
+
+	double length = playerAudio.getLength();
+    if (length > 0.0)
+    {
+        double currPosition = playerAudio.getPosition();
+        float x = thumbnailArea.getX() + ((float)(currPosition / length) * thumbnailArea.getWidth());
+
+        // Draw a vertical line at the current position
+        g.setColour(juce::Colours::red);
+        g.drawVerticalLine((int)x, (float)thumbnailArea.getY(), (float)thumbnailArea.getBottom());
+	}
 }
 
 
@@ -343,6 +383,13 @@ void PlayerGUI::sliderValueChanged(juce::Slider* slider)
             playerAudio.setPosition(slider->getValue());
         }
     }
+
+    if (slider == &speedSlider)
+    {
+		float newSpeed = (float)slider->getValue();
+		playerAudio.playbackSpeed(newSpeed);
+    }
+
 }
 
 void PlayerGUI::changeListenerCallback(juce::ChangeBroadcaster* source)
@@ -397,6 +444,18 @@ void PlayerGUI::timerCallback()
         playerAudio.setPosition(pointA);
         playerAudio.play();
     }
+    
+    repaint();
+}
+
+void PlayerGUI::changeListenerCallback(juce::ChangeBroadcaster* source)
+{
+    if (source == &playerAudio.getThumbnail())
+    {
+        // redraw the waveform when 'thumbnail' finally loads
+        repaint();
+	}
+}
 }
 
 juce::String PlayerGUI::formatTime(double seconds)
