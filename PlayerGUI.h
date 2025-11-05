@@ -1,11 +1,12 @@
-#pragma once // PlayerGUI.h
+#pragma once
 #include <JuceHeader.h>
 #include "PlayerAudio.h"
 
 class PlayerGUI : public juce::Component,
 	public juce::Button::Listener,
 	public juce::Slider::Listener,
-	public juce::Timer
+	public juce::ChangeListener,
+	public juce::ListBoxModel
 
 {
 public:
@@ -18,36 +19,42 @@ public:
 	void prepareToPlay(int samplesPerBlockExpected, double sampleRate);
 	void getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill);
 	void releaseResources();
-	bool Mute = false;
-	bool Loop = false;
-	void timerCallback() override;
+
+	int getNumRows() override;
+	void paintListBoxItem(int rowNumber, juce::Graphics& g, int width, int height, bool rowIsSelected) override;
+	void listBoxItemDoubleClicked(int row, const juce::MouseEvent& e) override;
+	void selectedRowsChanged(int lastRowSelected) override;
 
 private:
 	PlayerAudio playerAudio;
 
-	// GUI elements
-	juce::TextButton loadButton{"Load File"};
-	juce::TextButton toStartButton{"Start"};
-	juce::TextButton stopPlayButton{"Stop"};
-	juce::TextButton muteButton{"Mute"};
+	juce::TextButton muteButton{ "Mute" };
 	juce::TextButton loopButton{ "Loop" };
-	juce::TextButton toEndButton{ "End" };
+	juce::TextButton playPauseButton{ "Play" };
+	juce::TextButton loadButton{"Load File"};
 	juce::TextButton jumpBackButton{"-10s"};
 	juce::TextButton jumpForwardButton{"+10s"};
 	juce::TextButton saveSessionButton{"Save Session"};
 	juce::TextButton loadSessionButton{"Load Session"};
 	juce::TextButton addMarkerButton{"Add Marker"};
 	juce::TextButton jumpToMarkerButton{"Go to Marker"};
-	
+	juce::TextButton loadFolderButton{ "Load Playlist" };
+	juce::TextButton prevButton{ "Previous" };
+	juce::TextButton nextButton{ "Next" };
+	juce::TextButton deleteButton{ "Delete" };
+	juce::TextButton shuffleButton{ "Shuffle" };
 
-	// Storing volume before muting, initialized as the default start volume
-	float prevVolume = 0.5f;
+	juce::ListBox playlistBox;
+	
+	juce::Label metadataLabel;
 
 	juce::Slider volumeSlider;
 	std::unique_ptr <juce::FileChooser> fileChooser;
 
-	// Event handlers
 	void buttonClicked(juce::Button* button) override;
 	void sliderValueChanged(juce::Slider* slider) override;
+
+	void changeListenerCallback(juce::ChangeBroadcaster* source) override;
+
 	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PlayerGUI)
 };

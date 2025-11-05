@@ -1,4 +1,4 @@
-#pragma once						// MainComponent.h
+#pragma once
 #include <JuceHeader.h>
 #include "PlayerGUI.h"
 
