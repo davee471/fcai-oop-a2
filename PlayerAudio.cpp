@@ -33,6 +33,13 @@ void PlayerAudio::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferTo
     {
 		resampledSource->getNextAudioBlock(bufferToFill);
     }
+    else
+    {
+        // Frosty's bonus task tries to add both volumes
+        // so I need to clear the buffer when no file is loaded so that the music actually plays
+        // if I only load one player and not the other
+		bufferToFill.clearActiveBufferRegion();
+    }
 }
 
 void PlayerAudio::releaseResources()
