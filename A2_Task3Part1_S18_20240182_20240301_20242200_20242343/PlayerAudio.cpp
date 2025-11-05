@@ -1,46 +1,27 @@
 #include "PlayerAudio.h"
 
 PlayerAudio::PlayerAudio()
-// Initializing the thumbnail cache to hold 5 thumbnails and the thumbnail with 512 samples per thumbnail
-    : thumbnailCache(5), thumbnail(512, formatManager, thumbnailCache)
 {
-    formatManager.registerBasicFormats();
+	formatManager.registerBasicFormats();
 }
 
 PlayerAudio::~PlayerAudio()
 {
 }
 
-// Replaced the next 3 transport sources with the resampled source when it comes to audio processing
-// so that if left untouched it'll play at normal rate but if modified it'll automatically play the resampled version
-
 void PlayerAudio::prepareToPlay(int samplesPerBlockExpected, double sampleRate)
 {
-	// Storing these values so I can pass them to the resampled source when loading a new file
-	currentSamplesPerBlock = samplesPerBlockExpected;
-	currentSampleRate = sampleRate;
-
-    if (resampledSource)
-    {
-
-        resampledSource->prepareToPlay(samplesPerBlockExpected, sampleRate);
-    }
+    transportSource.prepareToPlay(samplesPerBlockExpected, sampleRate);
 }
 
 void PlayerAudio::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill)
 {
-    if (resampledSource)
-    {
-		resampledSource->getNextAudioBlock(bufferToFill);
-    }
+    transportSource.getNextAudioBlock(bufferToFill);
 }
 
 void PlayerAudio::releaseResources()
 {
-    if (resampledSource)
-    {
-		resampledSource->releaseResources();
-    }
+    transportSource.releaseResources();
 }
 
 bool PlayerAudio::loadFile(const juce::File& file)
@@ -50,40 +31,20 @@ bool PlayerAudio::loadFile(const juce::File& file)
 	currentFile = file;
         if (auto* reader = formatManager.createReaderFor(file))
         {
-            // Disconnect old source first
+            // 🔑 Disconnect old source first
             transportSource.stop();
             transportSource.setSource(nullptr);
             readerSource.reset();
-            resampledSource.reset();
 
             // Create new reader source
             readerSource = std::make_unique<juce::AudioFormatReaderSource>(reader, true);
 
-            // Attach safely to transport
+            // Attach safely
             transportSource.setSource(readerSource.get(),
                 0,
                 nullptr,
                 reader->sampleRate);
-
-            // Create resampled source and attach it to transport so transport reads from the speed modified source
-            // Passing the audio source I'm reading from
-            // second paramter false makes it so that it doesn't try to delete the source because it already delets itself
-            // third one is just telling it I want stereo audio (2 channels)
-            resampledSource = std::make_unique<juce::ResamplingAudioSource>(&transportSource, false, 2);
-
-			// Prepare the resampled source with the same info as before that we stored
-            if (resampledSource)
-            {
-                resampledSource->prepareToPlay(currentSamplesPerBlock, currentSampleRate);
-            }
-
-            resampledSource->setResamplingRatio(1.0);
-
-            thumbnail.setSource(new juce::FileInputSource(file));
-
-            // start transport
             transportSource.start();
-
         }
     }
     return true;
@@ -216,15 +177,4 @@ void PlayerAudio::jumpToMarker()
 	}
 
 
-void PlayerAudio::playbackSpeed(double ratio)
-{
-    if(resampledSource)
-    {
-        resampledSource->setResamplingRatio(ratio);
-	}
-}
 
-juce::AudioThumbnail& PlayerAudio::getThumbnail()
-{
-    return thumbnail;
-}

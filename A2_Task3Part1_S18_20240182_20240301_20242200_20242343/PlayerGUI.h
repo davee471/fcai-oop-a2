@@ -5,8 +5,7 @@
 class PlayerGUI : public juce::Component,
 	public juce::Button::Listener,
 	public juce::Slider::Listener,
-	public juce::Timer,
-	public juce::ChangeListener
+	public juce::Timer
 
 {
 public:
@@ -22,14 +21,9 @@ public:
 	bool Mute = false;
 	bool Loop = false;
 	void timerCallback() override;
-	void changeListenerCallback(juce::ChangeBroadcaster* source) override;
-
 
 private:
 	PlayerAudio playerAudio;
-
-	// to initialize as thumbnail in the playerGUI constructor so I don't have to keep using the getter
-	juce::AudioThumbnail& thumbnail;
 
 	// GUI elements
 	juce::TextButton loadButton{"Load File"};
@@ -50,7 +44,6 @@ private:
 	float prevVolume = 0.5f;
 
 	juce::Slider volumeSlider;
-	juce::Slider speedSlider;
 	std::unique_ptr <juce::FileChooser> fileChooser;
 
 	// Event handlers

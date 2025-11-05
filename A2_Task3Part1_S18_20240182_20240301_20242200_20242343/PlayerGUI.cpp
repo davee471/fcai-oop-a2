@@ -1,14 +1,13 @@
 #include "PlayerGUI.h"
 
 PlayerGUI::PlayerGUI()
-	: thumbnail(playerAudio.getThumbnail())
 {
     // Add buttons
     for (auto* btn : { 
 		&loadButton,
 		&toStartButton, 
  		&stopPlayButton, 
-		&loopButton,
+		&loopButton, 
 		&muteButton, 
 		&toEndButton, 
 		&jumpBackButton, 
@@ -31,21 +30,8 @@ PlayerGUI::PlayerGUI()
     volumeSlider.addListener(this);
     addAndMakeVisible(volumeSlider);
 
-    // Speed slider
-    speedSlider.setRange(0.25, 2.0, 0.25);
-    speedSlider.setValue(1);
-    speedSlider.setSliderStyle(juce::Slider::LinearVertical);
-    speedSlider.addListener(this);
-	addAndMakeVisible(speedSlider);
-
     // Tracking last volume before muting
     prevVolume = (float)volumeSlider.getValue();
-
-    // Start listening to waveform changes
-	thumbnail.addChangeListener(this);
-
-    // Starting a timer to keep redrawing where the waveform tracker is, can also be used for loop
-    startTimerHz(30);
 
 }
 
@@ -72,7 +58,6 @@ void PlayerGUI::resized()
     nextButton.setBounds(440, y, 80, 40);*/
 
     volumeSlider.setBounds(20, 100, getWidth() - 40, 30);
-	speedSlider.setBounds(getWidth() - 50, 300, 30, 100);
 }
 
 PlayerGUI::~PlayerGUI()
@@ -97,27 +82,6 @@ void PlayerGUI::releaseResources()
 void PlayerGUI::paint(juce::Graphics& g)
 {
     g.fillAll(juce::Colours::darkgrey);
-    juce::Rectangle<int> thumbnailArea(100, 200, getWidth() - 200, getHeight() - 350);
-
-    // Colour the rectangle in black
-    g.setColour(juce::Colours::black);
-    g.fillRect(thumbnailArea);
-	auto& thumbnail = playerAudio.getThumbnail();
-
-    // Colour the waveform in orange
-    g.setColour(juce::Colours::orange);
-    thumbnail.drawChannel(g, thumbnailArea, 0.0, thumbnail.getTotalLength(), 0 , 0.5f);
-
-	double length = playerAudio.getLength();
-    if (length > 0.0)
-    {
-        double currPosition = playerAudio.getPosition();
-        float x = thumbnailArea.getX() + ((float)(currPosition / length) * thumbnailArea.getWidth());
-
-        // Draw a vertical line at the current position
-        g.setColour(juce::Colours::red);
-        g.drawVerticalLine((int)x, (float)thumbnailArea.getY(), (float)thumbnailArea.getBottom());
-	}
 }
 
 void PlayerGUI::buttonClicked(juce::Button* button)
@@ -187,10 +151,12 @@ void PlayerGUI::buttonClicked(juce::Button* button)
         if (Loop)
         {
             loopButton.setButtonText("Loop Off");
+            startTimer(200); // call timercallback every 20ms
         }
         else
         {
             loopButton.setButtonText("Loop");
+            stopTimer();
         }
     }
 
@@ -270,12 +236,6 @@ void PlayerGUI::sliderValueChanged(juce::Slider* slider)
         }
     }
 
-    if (slider == &speedSlider)
-    {
-		float newSpeed = (float)slider->getValue();
-		playerAudio.playbackSpeed(newSpeed);
-    }
-
 }
 
 void PlayerGUI::timerCallback()
@@ -285,15 +245,4 @@ void PlayerGUI::timerCallback()
         playerAudio.setPosition(0.0);
         playerAudio.play();
     }
-    
-    repaint();
-}
-
-void PlayerGUI::changeListenerCallback(juce::ChangeBroadcaster* source)
-{
-    if (source == &playerAudio.getThumbnail())
-    {
-        // redraw the waveform when 'thumbnail' finally loads
-        repaint();
-	}
 }
