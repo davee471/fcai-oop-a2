@@ -24,6 +24,8 @@ public:
 	void timerCallback() override;
 	float pointA = -1.0;
 	float pointB = -1.0;
+	void sliderDragStarted(juce::Slider* slider) override;//me
+	void sliderDragEnded(juce::Slider* slider) override;//me
 
 private:
 	PlayerAudio playerAudio;

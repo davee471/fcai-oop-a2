@@ -44,7 +44,7 @@ PlayerGUI::PlayerGUI()
     timeLabel.setFont(juce::Font(10.0f, juce::Font::bold));
     timeLabel.setColour(juce::Label::textColourId, juce::Colours::white);
     addAndMakeVisible(timeLabel);
-    startTimer(100);
+    startTimer(100);//recall timercallback
     // Tracking last volume before muting
     prevVolume = (float)volumeSlider.getValue();
 
@@ -307,16 +307,11 @@ void PlayerGUI::sliderValueChanged(juce::Slider* slider)
     }
     else if (slider == &timelineslider)
     {
-       
-        if (!slider->isMouseButtonDown())
-        {
-            return; 
+     
 
             playerAudio.setPosition(slider->getValue());
-        }
-        else
-            playerAudio.setPosition((float)slider->getValue());
     }
+        
 
 
 }
@@ -352,4 +347,20 @@ juce::String PlayerGUI::formatTime(double seconds)
         return juce::String::formatted("%02d:%02d", mins, secs);
   
 
+}
+void PlayerGUI::sliderDragStarted(juce::Slider* slider)
+{
+    if (slider == &timelineslider)
+    {
+        playerAudio.stop();
+    }
+}
+
+void PlayerGUI::sliderDragEnded(juce::Slider* slider)
+{
+    if (slider == &timelineslider)
+    {
+        playerAudio.setPosition(slider->getValue());
+        playerAudio.play();
+    }
 }
