@@ -664,33 +664,62 @@ void PlayerGUI::changeListenerCallback(juce::ChangeBroadcaster* source)
     // if the change came from playeraudio
     if (source == &playerAudio)
     {
-        // get all the data (title length etc)
-        juce::String title = playerAudio.getTitle();
+        // get length first
         double lenSeconds = playerAudio.getLength();
-        int minutes = (int)(lenSeconds / 60);
-        int seconds = (int)(fmod(lenSeconds, 60.0));
-        juce::String duration = juce::String(minutes) + ":" + juce::String(seconds).paddedLeft('0', 2);
-        // build the metadata string
-        juce::String info = "Title: " + title + "\n" + "Duration: " + duration;
-        // set the metadata label text
-        metadataLabel.setText(info, juce::dontSendNotification);
 
-        // select the correct row in the playlist
-        playlistBox.selectRow(playerAudio.getCurrentIndex(), juce::dontSendNotification);
-
-        // update the timeline slider's range
-        timelineslider.setRange(0.0, lenSeconds, 0.1);
-        // update the time label text
-        timeLabel.setText(formatTime(playerAudio.getPosition()) + " / " + formatTime(lenSeconds), juce::dontSendNotification);
-
-        // update the marker button (enabled/disabled)
-        jumpToMarkerButton.setEnabled(playerAudio.isMarkerSet());
-
-        // update the marker label text
-        if (playerAudio.isMarkerSet())
-            markerLabel.setText("Marker: " + formatTime(playerAudio.getMarkerPosition()), juce::dontSendNotification);
-        else
+        if (lenSeconds == 0.0)
+        {
+            metadataLabel.setText("No file loaded", juce::dontSendNotification);
+            timeLabel.setText("00:00:00/00:00:00", juce::dontSendNotification);
+            timelineslider.setValue(0.0, juce::dontSendNotification);
+            timelineslider.setRange(0.0, 1.0, 0.1);
             markerLabel.setText("Marker: --:--", juce::dontSendNotification);
+
+        }
+
+        // If there's a song loaded or playing
+        else
+        {
+            // get all the data (title length etc)
+            juce::String title = playerAudio.getTitle();
+            juce::String artist = playerAudio.getArtist();
+            juce::String album = playerAudio.getAlbum();
+            juce::String year = playerAudio.getYear();
+
+
+            int minutes = (int)(lenSeconds / 60);
+            int seconds = (int)(fmod(lenSeconds, 60.0));
+            juce::String duration = juce::String(minutes) + ":" + juce::String(seconds).paddedLeft('0', 2);
+
+            // build the metadata string
+            juce::String info = "Title: " + title + "\n" +
+                "Artist: " + artist + "\n" +
+                "Album: " + album + "\n" +
+                "Duration: " + duration + "\n" +
+                "Year: " + year + "\n";
+
+            // set the metadata label text
+            metadataLabel.setText(info, juce::dontSendNotification);
+
+            // select the correct row in the playlist
+            playlistBox.selectRow(playerAudio.getCurrentIndex(), juce::dontSendNotification);
+
+            // update the timeline slider's range
+            timelineslider.setRange(0.0, lenSeconds, 0.1);
+            // update the time label text
+            timeLabel.setText(formatTime(playerAudio.getPosition()) + " / " + formatTime(lenSeconds), juce::dontSendNotification);
+
+            // update the marker button (enabled/disabled)
+            jumpToMarkerButton.setEnabled(playerAudio.isMarkerSet());
+
+            // update the marker label text
+            if (playerAudio.isMarkerSet())
+                markerLabel.setText("Marker: " + formatTime(playerAudio.getMarkerPosition()), juce::dontSendNotification);
+            else
+                markerLabel.setText("Marker: --:--", juce::dontSendNotification);
+
+        }
+
 
         // update all the transport button icons (toggled state)
         playPauseButton.setToggleState(playerAudio.playingState(), juce::dontSendNotification);

@@ -55,8 +55,11 @@ public:
     void playNext();
     bool isMarkerSet() const;
 
-    // gets the song title
+    // gets the song metadata
     juce::String getTitle() const;
+    juce::String getArtist() const; 
+    juce::String getAlbum() const; 
+    juce::String getYear() const;
 
     // all functions for managing the playlist
     bool addToPlaylist(const juce::File& file);
@@ -108,8 +111,11 @@ private:
     float pointA = -1.0;
     float pointB = -1.0;
 
-    // string to hold the song title (from metadata or file name)
+    // string to hold the metadata
     juce::String title;
+    juce::String artist;
+    juce::String album; 
+    juce::String year;
 
     // float to remember volume before muting
     float prevVolume = 0.5f;

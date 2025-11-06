@@ -1,4 +1,6 @@
 #include "PlayerAudio.h"
+#include <taglib/fileref.h>
+#include <taglib/tag.h>
 
 // this is the constructor
 // it initializes the player id
@@ -111,13 +113,45 @@ bool PlayerAudio::loadFile(const juce::File& file)
             // start transport (this just means the transport is ready)
             transportSource.start();
 
-            // try to read the "title" metadata from the file
-            title = reader->metadataValues["title"];
 
-            // if there is no title tag use the file name instead
-            if (title.isEmpty())
+            // set default metadata values
+            title = file.getFileNameWithoutExtension();
+            artist = "Unknown Artist";
+            album = "Unknown Album";
+            year = ""; 
+
+            // getting file path as a string
+            juce::String path = file.getFullPathName();
+
+            // making taglib FileRef object
+            TagLib::FileRef f(path.toWideCharPointer());
+
+            // check if the file and tags are valid
+            if (!f.isNull() && f.tag())
             {
-                title = file.getFileNameWithoutExtension();
+                TagLib::Tag* tag = f.tag();
+
+                // get metadata, chek if empty then convert to string
+                if (!tag->title().isEmpty())
+                {
+                    title = tag->title().toCString(true);
+                }
+                    
+                if (!tag->artist().isEmpty())
+                {
+                    artist = tag->artist().toCString(true);
+                }
+                    
+                if (!tag->album().isEmpty())
+                {
+                    album = tag->album().toCString(true);
+                }
+                   
+                if (tag->year() != 0)
+                {
+                    year = juce::String(tag->year());
+                }
+                    
             }
         }
     }
@@ -446,10 +480,25 @@ void PlayerAudio::timerCallback()
     }
 }
 
-// returns the title string
+// metadata getters
 juce::String PlayerAudio::getTitle() const
 {
     return title;
+}
+
+juce::String PlayerAudio::getArtist() const
+{
+    return artist;
+}
+
+juce::String PlayerAudio::getAlbum() const
+{
+    return album;
+}
+
+juce::String PlayerAudio::getYear() const
+{
+    return year;
 }
 
 // adds a file to the playlist
@@ -694,6 +743,9 @@ void PlayerAudio::clear()
     resampledSource.reset();
     // resets all variables to default
     title = "";
+    artist = "";
+    album = "";
+    year = "";
     currentFile = juce::File();
     currentIndex = -1;
     // clears the juce thumbnail waveform
