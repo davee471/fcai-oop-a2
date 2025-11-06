@@ -172,6 +172,8 @@ PlayerGUI::PlayerGUI(juce::String playerID) : playerAudio(playerID), thumbnail(p
     addAndMakeVisible(playlistBox);
     // tell it this class is its 'model' (data source)
     playlistBox.setModel(this);
+    // set the background colour
+    playlistBox.setColour(juce::ListBox::backgroundColourId, juce::Colour::fromString("#00xFF2A2A2A"));
 
     // tell playeraudio we want to listen for its changes
     playerAudio.addChangeListener(this);
@@ -223,7 +225,6 @@ void PlayerGUI::resized()
     fileButtonsBox.items.add(juce::FlexItem(saveSessionButton).withFlex(1).withMargin(5.0f));
     fileButtonsBox.items.add(juce::FlexItem(loadSessionButton).withFlex(1).withMargin(5.0f));
 
-
     // add all components to the top row
     // (file buttons metadata sliders)
     topRowBox.items.add(juce::FlexItem(fileButtonsBox).withWidth(120.0f));
@@ -249,53 +250,37 @@ void PlayerGUI::resized()
     playbackBox.flexDirection = juce::FlexBox::Direction::row;
     playbackBox.justifyContent = juce::FlexBox::JustifyContent::flexStart;
     // add all playback buttons to it
-    playbackBox.items.add(juce::FlexItem(playPauseButton).withFlex(1).withMargin(2.0f));
-    playbackBox.items.add(juce::FlexItem(prevButton).withFlex(1).withMargin(2.0f));
-    playbackBox.items.add(juce::FlexItem(nextButton).withFlex(1).withMargin(2.0f));
     playbackBox.items.add(juce::FlexItem(muteButton).withFlex(1).withMargin(2.0f));
-    playbackBox.items.add(juce::FlexItem(loopButton).withFlex(1).withMargin(2.0f));
+    playbackBox.items.add(juce::FlexItem(prevButton).withFlex(1).withMargin(2.0f));
+    playbackBox.items.add(juce::FlexItem(playPauseButton).withFlex(1).withMargin(2.0f));
+    playbackBox.items.add(juce::FlexItem(nextButton).withFlex(1).withMargin(2.0f));
     playbackBox.items.add(juce::FlexItem(jumpBackButton).withFlex(1).withMargin(2.0f));
     playbackBox.items.add(juce::FlexItem(jumpForwardButton).withFlex(1).withMargin(2.0f));
-
-    // create a box for just the marker buttons
-    juce::FlexBox markerButtonsBox;
-    markerButtonsBox.flexDirection = juce::FlexBox::Direction::row;
-    markerButtonsBox.items.add(juce::FlexItem(addMarkerButton).withFlex(1).withMargin(2.0f));
-    markerButtonsBox.items.add(juce::FlexItem(jumpToMarkerButton).withFlex(1).withMargin(2.0f));
+    playbackBox.items.add(juce::FlexItem(loopButton).withFlex(1).withMargin(2.0f));
+    playbackBox.items.add(juce::FlexItem(shuffleButton).withFlex(1).withMargin(2.0f));
+    playbackBox.items.add(juce::FlexItem(addMarkerButton).withFlex(1).withMargin(2.0f));
+    playbackBox.items.add(juce::FlexItem(jumpToMarkerButton).withFlex(1).withMargin(2.0f));
 
     // create a vertical column for the marker buttons and label
     juce::FlexBox markerColumn;
     markerColumn.flexDirection = juce::FlexBox::Direction::column;
+    markerColumn.justifyContent = juce::FlexBox::JustifyContent::center;
     // add the buttons and label to the column
-    markerColumn.items.add(juce::FlexItem(markerButtonsBox).withFlex(1.0));
     markerColumn.items.add(juce::FlexItem(markerLabel).withHeight(20.0f));
 
-    // create a box for the a-b loop buttons
-    juce::FlexBox abLoopBox;
-    abLoopBox.flexDirection = juce::FlexBox::Direction::row;
-    // add all three a-b loop buttons to it
-    abLoopBox.items.add(juce::FlexItem(set_A_pos).withFlex(1).withMargin(2.0f));
-    abLoopBox.items.add(juce::FlexItem(set_B_pos).withFlex(1).withMargin(2.0f));
-    abLoopBox.items.add(juce::FlexItem(set_AB_loop).withFlex(1).withMargin(2.0f));
-
-    // add the three sub-boxes to the main controls row
-    // (playback marker a-b loop)
-    controlsRowBox.items.add(juce::FlexItem(playbackBox).withFlex(2.5));
+    // add the sub-boxes to the main controls row
+    // (playback marker) - abLoopBox removed
+    controlsRowBox.items.add(juce::FlexItem(playbackBox).withFlex(5.0));
     controlsRowBox.items.add(juce::FlexItem(markerColumn).withFlex(1.0));
-    controlsRowBox.items.add(juce::FlexItem(abLoopBox).withFlex(1.5));
 
     // create the playlist controls row (horizontal)
     juce::FlexBox playlistControlsBox;
     playlistControlsBox.flexDirection = juce::FlexBox::Direction::row;
-    playlistControlsBox.justifyContent = juce::FlexBox::JustifyContent::flexStart; // align left
-    // add the load playlist and shuffle buttons
-    playlistControlsBox.items.add(juce::FlexItem(loadFolderButton).withWidth(120.0f).withMargin(5.0f));
-    playlistControlsBox.items.add(juce::FlexItem(shuffleButton).withWidth(60.0f).withMargin(5.0f));
-    // add a spacer to push the delete button to the right
-    playlistControlsBox.items.add(juce::FlexItem().withFlex(1.0));
-    // add the delete button
-    playlistControlsBox.items.add(juce::FlexItem(deleteButton).withWidth(90.0f).withMargin(5.0f));
-
+    playlistControlsBox.alignItems = juce::FlexBox::AlignItems::stretch;
+    playlistControlsBox.items.add(juce::FlexItem(loadFolderButton).withFlex(1.5).withMargin(5.0f));
+    playlistControlsBox.items.add(juce::FlexItem(set_A_pos).withFlex(1.0).withMargin(5.0f));
+    playlistControlsBox.items.add(juce::FlexItem(set_B_pos).withFlex(1.0).withMargin(5.0f));
+    playlistControlsBox.items.add(juce::FlexItem(set_AB_loop).withFlex(1.5).withMargin(5.0f));
 
     // add all the rows to the main vertical flexbox
     // (top row timeline controls playlist-controls playlist)
