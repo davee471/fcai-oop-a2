@@ -13,6 +13,39 @@
       <FILE id="jQZidl" name="PlayerGUI.cpp" compile="1" resource="0" file="../../PlayerGUI.cpp"/>
       <FILE id="tOuNbX" name="PlayerGUI.h" compile="0" resource="0" file="../../PlayerGUI.h"/>
     </GROUP>
+    <GROUP id="{CF425799-64EC-5BD0-B102-3DBF48E2F72D}" name="A2 Icons">
+      <FILE id="NVGdXN" name="endBig.png" compile="0" resource="1" file="../../A2 Icons/endBig.png"/>
+      <FILE id="uNi9w1" name="endSmall.png" compile="0" resource="1" file="../../A2 Icons/endSmall.png"/>
+      <FILE id="kJ7RRs" name="ffw10Big.png" compile="0" resource="1" file="../../A2 Icons/ffw10Big.png"/>
+      <FILE id="FPvwSe" name="ffw10Small.png" compile="0" resource="1" file="../../A2 Icons/ffw10Small.png"/>
+      <FILE id="cchnso" name="ffwBig.png" compile="0" resource="1" file="../../A2 Icons/ffwBig.png"/>
+      <FILE id="FQcj3C" name="ffwSmall.png" compile="0" resource="1" file="../../A2 Icons/ffwSmall.png"/>
+      <FILE id="FxyLlU" name="loopBig.png" compile="0" resource="1" file="../../A2 Icons/loopBig.png"/>
+      <FILE id="RAnzLC" name="loopSmall.png" compile="0" resource="1" file="../../A2 Icons/loopSmall.png"/>
+      <FILE id="iUtCpq" name="markerBig.png" compile="0" resource="1" file="../../A2 Icons/markerBig.png"/>
+      <FILE id="nS5smy" name="markerSmall.png" compile="0" resource="1" file="../../A2 Icons/markerSmall.png"/>
+      <FILE id="k0aTC7" name="muteBig.png" compile="0" resource="1" file="../../A2 Icons/muteBig.png"/>
+      <FILE id="UmOejq" name="muteSmall.png" compile="0" resource="1" file="../../A2 Icons/muteSmall.png"/>
+      <FILE id="vnGZd7" name="pauseBig.png" compile="0" resource="1" file="../../A2 Icons/pauseBig.png"/>
+      <FILE id="vHoBid" name="pauseSmall.png" compile="0" resource="1" file="../../A2 Icons/pauseSmall.png"/>
+      <FILE id="zV4CNS" name="playBig.png" compile="0" resource="1" file="../../A2 Icons/playBig.png"/>
+      <FILE id="hMt8h0" name="playSmall.png" compile="0" resource="1" file="../../A2 Icons/playSmall.png"/>
+      <FILE id="E7VePg" name="rw10Big.png" compile="0" resource="1" file="../../A2 Icons/rw10Big.png"/>
+      <FILE id="rKz1DN" name="rw10Small.png" compile="0" resource="1" file="../../A2 Icons/rw10Small.png"/>
+      <FILE id="xxuKes" name="rwBig.png" compile="0" resource="1" file="../../A2 Icons/rwBig.png"/>
+      <FILE id="JvOSzn" name="rwSmall.png" compile="0" resource="1" file="../../A2 Icons/rwSmall.png"/>
+      <FILE id="x7eeZd" name="shuffleBig.png" compile="0" resource="1" file="../../A2 Icons/shuffleBig.png"/>
+      <FILE id="I3EBBX" name="shuffleSmall.png" compile="0" resource="1"
+            file="../../A2 Icons/shuffleSmall.png"/>
+      <FILE id="Q1Vkjq" name="toStartBig.png" compile="0" resource="1" file="../../A2 Icons/toStartBig.png"/>
+      <FILE id="IYaS6G" name="toStartSmall.png" compile="0" resource="1"
+            file="../../A2 Icons/toStartSmall.png"/>
+      <FILE id="lhIiX1" name="unmuteBig.png" compile="0" resource="1" file="../../A2 Icons/unmuteBig.png"/>
+      <FILE id="HnA2ur" name="goMarkerBig.png" compile="0" resource="1" file="../../A2 Icons/goMarkerBig.png"/>
+      <FILE id="HR1Xe9" name="goMarkerSmall.png" compile="0" resource="1"
+            file="../../A2 Icons/goMarkerSmall.png"/>
+      <FILE id="suoxFR" name="unmuteSmall.png" compile="0" resource="1" file="../../A2 Icons/unmuteSmall.png"/>
+    </GROUP>
   </MAINGROUP>
   <MODULES>
     <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>

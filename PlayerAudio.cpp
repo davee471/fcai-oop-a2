@@ -122,6 +122,8 @@ void PlayerAudio::stop()
 {
     if (playingState()) transportSource.stop();
     else play();
+
+	sendChangeMessage();
 }
 
 void PlayerAudio::setGain(float gain)
@@ -295,15 +297,23 @@ void PlayerAudio::jumpToMarker()
         transportSource.setPosition(markerPosition);
 }
 
-void PlayerAudio::muteUnmute() 
+void PlayerAudio::muteUnmute()
 {
-    Mute = !Mute;
-    setGain(Mute ? 0.0f : prevVolume);
+    if (Mute)
+    {
+        setGain(prevVolume);
+    }
+    else
+    {
+        setGain(0.0f);
+    }
 }
 
 void PlayerAudio::loop()
 {
     Loop = !Loop;
+
+    sendChangeMessage();
 }
 
 void PlayerAudio::timerCallback() 
@@ -341,7 +351,8 @@ void PlayerAudio::timerCallback()
 
         else
         {
-            stopTimer(); 
+            stopTimer();
+            clear();
         }
     }
 }
@@ -370,11 +381,7 @@ void PlayerAudio::removeFromPlaylist(int index)
 
     if (index == currentIndex)
     {
-        stop();
-        transportSource.setSource(nullptr);
-        readerSource.reset();
-        title = "";
-        currentIndex = -1;
+        clear();
     }
 
     else if (index < currentIndex)
@@ -461,6 +468,8 @@ void PlayerAudio::playNext()
 void PlayerAudio::shuffle()
 {
     Shuffle = !Shuffle;
+
+    sendChangeMessage();
 }
 
 bool PlayerAudio::shuffleState() const
@@ -538,4 +547,21 @@ float PlayerAudio::getPointB() const
 bool PlayerAudio::abLoopState() const 
 {
     return AB_loop;
+}
+
+void PlayerAudio::clear()
+{
+    stop();
+    transportSource.setSource(nullptr);
+    readerSource.reset();
+    resampledSource.reset();
+    title = "";
+    currentFile = juce::File();
+    currentIndex = -1;
+    thumbnail.clear();
+    markerPosition = -1.0;
+    pointA = -1.0;
+    pointB = -1.0;
+    AB_loop = false;
+    sendChangeMessage();
 }

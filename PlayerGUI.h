@@ -40,36 +40,39 @@ private:
 	juce::AudioThumbnail& thumbnail;
 
 	// GUI elements
-	juce::TextButton muteButton{ "Mute" };
-	juce::TextButton loopButton{ "Loop" };
-	juce::TextButton playPauseButton{ "Play" };
+	juce::ImageButton muteButton;
+	juce::ImageButton loopButton;
+	juce::ImageButton playPauseButton;
 	juce::TextButton loadButton{"Load File"};
-	juce::TextButton jumpBackButton{"-10s"};
-	juce::TextButton jumpForwardButton{"+10s"};
+	juce::ImageButton jumpBackButton;
+	juce::ImageButton jumpForwardButton;
 	juce::TextButton saveSessionButton{"Save Session"};
 	juce::TextButton loadSessionButton{"Load Session"};
-	juce::TextButton addMarkerButton{"Add Marker"};
-	juce::TextButton jumpToMarkerButton{"Go to Marker"};
+	juce::ImageButton addMarkerButton;
+	juce::ImageButton jumpToMarkerButton;
+
 
 	juce::Slider timelineslider;//me
 	juce::Label timeLabel;
 	juce::String formatTime(double seconds);
-	juce::TextButton set_A_pos{"set A"};
-	juce::TextButton set_B_pos{"set B"};
-	juce::TextButton set_AB_loop{ "A=>B_loop" };
+	juce::TextButton set_A_pos{"Set A"};
+	juce::TextButton set_B_pos{"Set B"};
+	juce::TextButton set_AB_loop{ "A->B Loop" };
 	//juce::TextButton clearAB;
 
 	bool wasPlaying = false;
 
 	juce::TextButton loadFolderButton{ "Load Playlist" };
-	juce::TextButton prevButton{ "Previous" };
-	juce::TextButton nextButton{ "Next" };
+	juce::ImageButton prevButton;
+	juce::ImageButton nextButton;
 	juce::TextButton deleteButton{ "Delete" };
-	juce::TextButton shuffleButton{ "Shuffle" };
+	juce::ImageButton shuffleButton;
 
 	juce::ListBox playlistBox;
 	
 	juce::Label metadataLabel;
+	juce::Label speedLabel;
+	juce::Label volumeLabel;
 
 	juce::Slider volumeSlider;
 	juce::Slider speedSlider;

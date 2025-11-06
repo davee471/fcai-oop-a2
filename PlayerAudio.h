@@ -63,6 +63,9 @@ public:
     bool abLoopState() const;
     void resetABLoop();
 
+    // This is to clear everything when a song is over or deleted audio from playlist (mainly did this for waveform)
+    void clear();
+
 private:
     bool Mute = false;
     bool Loop = false;

@@ -19,6 +19,11 @@ void MainComponent::prepareToPlay(int samplesPerBlockExpected, double sampleRate
     player2.prepareToPlay(samplesPerBlockExpected, sampleRate);
 }
 
+void MainComponent::paint(juce::Graphics& g)
+{
+    g.fillAll(juce::Colours::darkgrey);
+}
+
 void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill)
 {
 
@@ -58,6 +63,14 @@ void MainComponent::releaseResources()
 void MainComponent::resized()
 {
     auto area = getLocalBounds();
-    player1.setBounds(area.removeFromLeft(getWidth() / 2));
+    // initialize splititng line 
+    int splitLineWidth = 2;
+
+    // give player1 half of the splitting line
+    player1.setBounds(area.removeFromLeft(getWidth() / 2 - splitLineWidth / 2));
+
+    // eat up the rest of line
+	area.removeFromLeft(splitLineWidth);
+	// give player2 the rest
     player2.setBounds(area);
 }

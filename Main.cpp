@@ -30,7 +30,7 @@ private:
             setContentOwned(new MainComponent(), true); // MainComponent = our UI + logic
             setResizable(true, true);
             setResizeLimits(800, 600, 10000, 10000);
-            centreWithSize(1800, 900);
+            centreWithSize(800, 600);
             setVisible(true);
         }
 
