@@ -659,6 +659,9 @@ void PlayerGUI::changeListenerCallback(juce::ChangeBroadcaster* source)
             timelineslider.setValue(0.0, juce::dontSendNotification);
             timelineslider.setRange(0.0, 1.0, 0.1);
             markerLabel.setText("Marker: --:--", juce::dontSendNotification);
+            set_A_pos.setButtonText("Set A");
+            set_B_pos.setButtonText("Set B");
+            set_AB_loop.setButtonText("A->B Loop");
 
         }
 
@@ -699,10 +702,42 @@ void PlayerGUI::changeListenerCallback(juce::ChangeBroadcaster* source)
 
             // update the marker label text
             if (playerAudio.isMarkerSet())
+            {
                 markerLabel.setText("Marker: " + formatTime(playerAudio.getMarkerPosition()), juce::dontSendNotification);
+
+            }
             else
+            {
                 markerLabel.setText("Marker: --:--", juce::dontSendNotification);
 
+            }
+
+            if (playerAudio.getPointA() >= 0)
+            {
+                set_A_pos.setButtonText("A: " + formatTime(playerAudio.getPointA()));
+            }
+            else
+            {
+                set_A_pos.setButtonText("Set A");
+            }
+
+            if (playerAudio.getPointB() >= 0)
+            {
+                set_B_pos.setButtonText("B: " + formatTime(playerAudio.getPointB()));
+            }
+            else
+            {
+                set_B_pos.setButtonText("Set B");
+            }
+            if (playerAudio.abLoopState())
+            {
+                set_AB_loop.setButtonText("End AB Loop");
+            }
+            else
+            {
+                set_AB_loop.setButtonText("A->B Loop");
+
+            }
         }
 
 
@@ -755,9 +790,14 @@ juce::String PlayerGUI::formatTime(double seconds)
     int mins = ((int)seconds % 3600) / 60;
     int secs = (int)seconds % 60;
     if (hours > 0)
+    {
         return juce::String::formatted("%02d:%02d:%02d", hours, mins, secs);
+    }
+
     else
+    {
         return juce::String::formatted("%02d:%02d", mins, secs);
+    }
 }
 
 // called when the user clicks the timeline
