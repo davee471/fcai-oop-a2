@@ -278,6 +278,7 @@ void PlayerGUI::resized()
     playlistControlsBox.flexDirection = juce::FlexBox::Direction::row;
     playlistControlsBox.alignItems = juce::FlexBox::AlignItems::stretch;
     playlistControlsBox.items.add(juce::FlexItem(loadFolderButton).withFlex(1.5).withMargin(5.0f));
+    playlistControlsBox.items.add(juce::FlexItem(deleteButton).withFlex(1.0).withMargin(5.0f));
     playlistControlsBox.items.add(juce::FlexItem(set_A_pos).withFlex(1.0).withMargin(5.0f));
     playlistControlsBox.items.add(juce::FlexItem(set_B_pos).withFlex(1.0).withMargin(5.0f));
     playlistControlsBox.items.add(juce::FlexItem(set_AB_loop).withFlex(1.5).withMargin(5.0f));
