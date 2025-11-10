@@ -13,6 +13,39 @@
       <FILE id="jQZidl" name="PlayerGUI.cpp" compile="1" resource="0" file="../../PlayerGUI.cpp"/>
       <FILE id="tOuNbX" name="PlayerGUI.h" compile="0" resource="0" file="../../PlayerGUI.h"/>
     </GROUP>
+    <GROUP id="{CF425799-64EC-5BD0-B102-3DBF48E2F72D}" name="A2 Icons">
+      <FILE id="sVqEDz" name="endBig.png" compile="0" resource="1" file="../../A2 Icons/endBig.png"/>
+      <FILE id="BOjo18" name="endSmall.png" compile="0" resource="1" file="../../A2 Icons/endSmall.png"/>
+      <FILE id="UATqvm" name="ffw10Big.png" compile="0" resource="1" file="../../A2 Icons/ffw10Big.png"/>
+      <FILE id="v0cLZn" name="ffw10Small.png" compile="0" resource="1" file="../../A2 Icons/ffw10Small.png"/>
+      <FILE id="yMViYH" name="ffwBig.png" compile="0" resource="1" file="../../A2 Icons/ffwBig.png"/>
+      <FILE id="Ml0Egk" name="ffwSmall.png" compile="0" resource="1" file="../../A2 Icons/ffwSmall.png"/>
+      <FILE id="w6PtZM" name="goMarkerBig.png" compile="0" resource="1" file="../../A2 Icons/goMarkerBig.png"/>
+      <FILE id="cJbEMG" name="goMarkerSmall.png" compile="0" resource="1"
+            file="../../A2 Icons/goMarkerSmall.png"/>
+      <FILE id="Xu37l6" name="loopBig.png" compile="0" resource="1" file="../../A2 Icons/loopBig.png"/>
+      <FILE id="nbziJs" name="loopSmall.png" compile="0" resource="1" file="../../A2 Icons/loopSmall.png"/>
+      <FILE id="zB1aDu" name="markerBig.png" compile="0" resource="1" file="../../A2 Icons/markerBig.png"/>
+      <FILE id="MmckdP" name="markerSmall.png" compile="0" resource="1" file="../../A2 Icons/markerSmall.png"/>
+      <FILE id="uJJem0" name="muteBig.png" compile="0" resource="1" file="../../A2 Icons/muteBig.png"/>
+      <FILE id="MXesC3" name="muteSmall.png" compile="0" resource="1" file="../../A2 Icons/muteSmall.png"/>
+      <FILE id="W9T3wh" name="pauseBig.png" compile="0" resource="1" file="../../A2 Icons/pauseBig.png"/>
+      <FILE id="lsMwqA" name="pauseSmall.png" compile="0" resource="1" file="../../A2 Icons/pauseSmall.png"/>
+      <FILE id="IBUNGe" name="playBig.png" compile="0" resource="1" file="../../A2 Icons/playBig.png"/>
+      <FILE id="OruabM" name="playSmall.png" compile="0" resource="1" file="../../A2 Icons/playSmall.png"/>
+      <FILE id="VUYvr6" name="rw10Big.png" compile="0" resource="1" file="../../A2 Icons/rw10Big.png"/>
+      <FILE id="ivrO43" name="rw10Small.png" compile="0" resource="1" file="../../A2 Icons/rw10Small.png"/>
+      <FILE id="qfCPkO" name="rwBig.png" compile="0" resource="1" file="../../A2 Icons/rwBig.png"/>
+      <FILE id="WTe5il" name="rwSmall.png" compile="0" resource="1" file="../../A2 Icons/rwSmall.png"/>
+      <FILE id="DqeLQh" name="shuffleBig.png" compile="0" resource="1" file="../../A2 Icons/shuffleBig.png"/>
+      <FILE id="v89K6Q" name="shuffleSmall.png" compile="0" resource="1"
+            file="../../A2 Icons/shuffleSmall.png"/>
+      <FILE id="voFfKf" name="toStartBig.png" compile="0" resource="1" file="../../A2 Icons/toStartBig.png"/>
+      <FILE id="uNPQtV" name="toStartSmall.png" compile="0" resource="1"
+            file="../../A2 Icons/toStartSmall.png"/>
+      <FILE id="hfoLfn" name="unmuteBig.png" compile="0" resource="1" file="../../A2 Icons/unmuteBig.png"/>
+      <FILE id="bfE0Bd" name="unmuteSmall.png" compile="0" resource="1" file="../../A2 Icons/unmuteSmall.png"/>
+    </GROUP>
   </MAINGROUP>
   <MODULES>
     <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
@@ -29,24 +62,25 @@
   </MODULES>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1"/>
   <EXPORTFORMATS>
-    <VS2022 targetFolder="Builds/VisualStudio2022">
+    <LINUX_MAKE targetFolder="Builds/LinuxMakefile">
       <CONFIGURATIONS>
-        <CONFIGURATION isDebug="1" name="Debug" targetName="NewProject"/>
-        <CONFIGURATION isDebug="0" name="Release" targetName="NewProject"/>
+        <CONFIGURATION isDebug="1" name="Debug" headerPath="/usr/include/freetype2&#10;/usr/include/gtk-3.0&#10;/usr/include/glib-2.0&#10;/usr/lib/glib-2.0/include&#10;/usr/include/pango-1.0&#10;/usr/include/harfbuzz&#10;/usr/include/pango-1.0&#10;/usr/include/glib-2.0&#10;/usr/lib64/glib-2.0/include&#10;/usr/include/cairo&#10;/usr/include/gdk-pixbuf-2.0&#10;/usr/include/gtk-3.0&#10;/usr/include/freetype2&#10;/usr/include/atk-1.0&#10;/usr/include/taglib"
+                       extraLinkerFlags="-ltag&#10;-lz" defines="JUCE_USE_MP3AUDIOFORMAT=1&#10;JUCE_USE_OGGVORBIS=1  &#10;JUCE_USE_FLAC=1"/>
+        <CONFIGURATION isDebug="0" name="Release"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
-        <MODULEPATH id="juce_audio_basics" path="../../JUCE/modules"/>
-        <MODULEPATH id="juce_audio_devices" path="../../JUCE/modules"/>
-        <MODULEPATH id="juce_audio_formats" path="../../JUCE/modules"/>
-        <MODULEPATH id="juce_audio_processors" path="../../JUCE/modules"/>
-        <MODULEPATH id="juce_audio_utils" path="../../JUCE/modules"/>
-        <MODULEPATH id="juce_core" path="../../JUCE/modules"/>
-        <MODULEPATH id="juce_data_structures" path="../../JUCE/modules"/>
-        <MODULEPATH id="juce_events" path="../../JUCE/modules"/>
-        <MODULEPATH id="juce_graphics" path="../../JUCE/modules"/>
-        <MODULEPATH id="juce_gui_basics" path="../../JUCE/modules"/>
-        <MODULEPATH id="juce_gui_extra" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../../juce"/>
+        <MODULEPATH id="juce_audio_devices" path="../../juce"/>
+        <MODULEPATH id="juce_audio_formats" path="../../juce"/>
+        <MODULEPATH id="juce_audio_processors" path="../../juce"/>
+        <MODULEPATH id="juce_audio_utils" path="../../juce"/>
+        <MODULEPATH id="juce_core" path="../../juce"/>
+        <MODULEPATH id="juce_data_structures" path="../../juce"/>
+        <MODULEPATH id="juce_events" path="../../juce"/>
+        <MODULEPATH id="juce_graphics" path="../../juce"/>
+        <MODULEPATH id="juce_gui_basics" path="../../juce"/>
+        <MODULEPATH id="juce_gui_extra" path="../../juce"/>
       </MODULEPATHS>
-    </VS2022>
+    </LINUX_MAKE>
   </EXPORTFORMATS>
 </JUCERPROJECT>
